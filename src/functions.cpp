@@ -105,7 +105,6 @@ bool execute_on_file(string filename) {
 	vector<vector<string> > matrix;
 	vector<vector<vector<string> > > datas, headers;
 	
-	
 	/*load file*/
 	if (!Tools::load_file_to_string(filename,&contents)) return false;
 	
@@ -119,9 +118,8 @@ bool execute_on_file(string filename) {
 	Tools::fillup_matrix(&content_matrix);
 	
 	/*discard lines or columns before parsing*/
-	if (!params.output.check_lines_after_parsing) filter_lines(&content_matrix);
-	if (!params.output.check_columns_after_parsing) filter_columns(&content_matrix);
-	
+	if (!params.output.check_lines_in_header && !params.output.check_lines_in_data) filter_lines(&content_matrix);
+	if (!params.output.check_columns_in_data && !params.output.check_columns_in_header) filter_columns(&content_matrix);
 	
 	/*parse the headers and the datas (tensors)*/
 	parse_data_and_header_parts(&content_matrix,&datas,&headers);
@@ -129,8 +127,16 @@ bool execute_on_file(string filename) {
 	/*unify the headers to one header matrix*/
 	vector<vector<string> > header = Tools::transform_tensor_unifying_columns_to_matrix(&headers);
 	
+	/*discard lines or columns before parsing*/
+	if (params.output.check_lines_in_header) filter_lines(&header);
+	if (params.output.check_columns_in_header) filter_columns(&header);
+	
 	/*unify the datas to one data matrix*/
 	vector<vector<string> > data = Tools::transform_tensor_unifying_columns_to_matrix(&datas);
+	
+	/*discard lines or columns before parsing*/
+	if (params.output.check_lines_in_data) filter_lines(&data);
+	if (params.output.check_columns_in_data) filter_columns(&data);
 	
 	/*translate commands in output directory form input filename*/
 	string op_dir = translate_input_to_output(params.output.directory,filename,&header);
@@ -153,10 +159,6 @@ bool execute_on_file(string filename) {
 	unify.push_back(data);
 	vector<vector<string> > unification = Tools::transform_tensor_unifying_lines_to_matrix(&unify);
 	
-	/*discard lines or columns after parsing*/
-	if (params.output.check_lines_after_parsing) filter_lines(&unification); 
-	if (params.output.check_columns_after_parsing) filter_columns(&unification);
-	
 	/*create output string*/
 	string output_string = Tools::format_matrix_to_string(&unification,config_params["line_delimiter"],params.output.data_delimiter);
 	
@@ -168,7 +170,6 @@ bool execute_on_file(string filename) {
 	/*if no output directory, set directory of input as default*/
 	if (op_dir=="") {
 		op_dir = Tools::extract_directory_from_filename(filename,config_params["path_delimiter"]);
-		cout << op_dir << endl;
 	}
 	
 	/*check if directory is correct formatted - don t forget path delimiters*/
@@ -329,12 +330,16 @@ bool filter_columns(vector<vector<string> > *matrix) {
 			columns.push_back(i);
 		}
 		for (int i=params.input.columns.size()-1;i>=0;i--) {
-			columns.erase(columns.begin()+params.input.columns[i]-1);
+// 			columns.erase(columns.begin()+params.input.columns[i]-1);
+			if (params.input.columns[i]>0) columns[params.input.columns[i]-1]=-1;
+			if (params.input.columns[i]<0) columns[columns.size()+params.input.columns[i]]=-1;
 			if (columns.size()<1) return false;
 		}
 	} else {
 	  for (int i=0;i<params.input.columns.size();i++) {
-		  columns.push_back(params.input.columns[i]-1);
+// 		  columns.push_back(params.input.columns[i]-1);
+		  if (params.input.columns[i]>0) columns.push_back(params.input.columns[i]-1);
+		  if (params.input.columns[i]<0) columns.push_back((matrix->at(0)).size()+params.input.columns[i]);
 	  }
 	  
 	}
@@ -356,16 +361,19 @@ bool filter_lines(vector<vector<string> > *matrix) {
 			lines.push_back(i);
 		}
 		for (int i=params.input.lines.size()-1;i>=0;i--) {
-			 lines.erase(lines.begin()+params.input.lines[i]-1);
-			 if (lines.size()<1) return false;
+// 			if (params.input.lines[i]>0) lines.erase(lines.begin()+params.input.lines[i]-1);
+			if (params.input.lines[i]>0) lines[params.input.lines[i]-1]=-1;
+			if (params.input.lines[i]<0) lines[lines.size()+params.input.lines[i]]=-1;
+			if (lines.size()<1) return false;
 		}
 	} else {
 	  for (int i=0;i<params.input.lines.size();i++) {
-		  lines.push_back(params.input.lines[i]-1);
+		  if (params.input.lines[i]>0) lines.push_back(params.input.lines[i]-1);
+		  if (params.input.lines[i]<0) lines.push_back(matrix->size()+params.input.lines[i]);
 	  }
 	}
 	}
-// 	Print::vector_int(lines);
+	Print::vector_int(lines);
 	Tools::remove_lines_or_columns_from_matrix(matrix,&lines,&columns);
 	
 	return true;

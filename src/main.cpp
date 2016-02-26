@@ -41,7 +41,7 @@ GtkBuilder *builder;
 
 int main( int    argc, char **argv )
 { 
-    fclose(stdout); fclose(stderr);
+//     fclose(stdout); fclose(stderr);
     
     #ifdef DEBUG
     cout << "Program start" << endl;

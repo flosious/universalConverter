@@ -553,8 +553,10 @@ bool get_button_state_by_name(string widget_name) {
 bool parse_buttons() {
 	params.output.overwrite_protection=get_button_state_by_name("WRITEPROTECTION_CHECKBUTTON");
 	params.input.remove_headers=get_button_state_by_name("REMOVE_HEADER_CHECKBUTTON");
-	params.output.check_columns_after_parsing=get_button_state_by_name("CHECK_COLUMNS_CHECKBUTTON");
-	params.output.check_lines_after_parsing=get_button_state_by_name("CHECK_LINES_CHECKBUTTON");
+	params.output.check_lines_in_header=get_button_state_by_name("check_lines_in_header");
+	params.output.check_lines_in_data=get_button_state_by_name("check_lines_in_data");
+	params.output.check_columns_in_header=get_button_state_by_name("check_columns_in_header");
+	params.output.check_columns_in_data=get_button_state_by_name("check_columns_in_data");
 	return true;
 }  
   
@@ -1027,12 +1029,6 @@ void show_box(string message,string type) {
 
 bool clear_params() {
 	parameter new_params;
-	// remember toogeling
-// 	new_params.output.overwrite_protection=params.output.overwrite_protection;
-// 	new_params.input.remove_headers=params.input.remove_headers;
-// 	new_params.output.check_columns_after_parsing=params.output.check_columns_after_parsing;
-// 	new_params.output.check_lines_after_parsing=params.output.check_lines_after_parsing;
-	//
 	params = new_params;
 }
   

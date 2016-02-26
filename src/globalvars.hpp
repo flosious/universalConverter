@@ -41,8 +41,12 @@ struct op {
 	string data_delimiter;
 	vector< vector<string> > format;
 	bool overwrite_protection;
-	bool check_lines_after_parsing;
-	bool check_columns_after_parsing;
+// 	bool check_lines_after_parsing;
+// 	bool check_columns_after_parsing;
+	bool check_lines_in_header;
+	bool check_lines_in_data;
+	bool check_columns_in_header;
+	bool check_columns_in_data;
 };
 
 struct ip {

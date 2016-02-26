@@ -51,6 +51,10 @@ string Tools::extract_filename(string filename,string filepath_delimiter,string 
 string Tools::extract_directory_from_filename(string filename,string filepath_delimiter) {
 	string directory="";
 	vector<string> directory_parts = Tools::get_strings_between_delimiter(filename,filepath_delimiter);
+	if (directory_parts.size()<2) {
+		directory=string(".")+filepath_delimiter;
+		return directory;
+	}
 	for (int i=0; i<directory_parts.size()-1;i++) {
 		directory.append(directory_parts[i]);
 		directory.append(filepath_delimiter);
