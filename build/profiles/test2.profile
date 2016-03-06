@@ -102,7 +102,7 @@ gtktextview
 gtkcheckbutton
 </type>
 <content>
-0
+1
 </content>
 
 </WRITEPROTECTION_CHECKBUTTON>
@@ -120,7 +120,7 @@ gtktextview
 gtkcheckbutton
 </type>
 <content>
-0
+1
 </content>
 
 </check_columns_in_data>
@@ -129,7 +129,7 @@ gtkcheckbutton
 gtkcheckbutton
 </type>
 <content>
-0
+1
 </content>
 
 </check_columns_in_header>
@@ -138,7 +138,7 @@ gtkcheckbutton
 gtkcheckbutton
 </type>
 <content>
-0
+1
 </content>
 
 </check_lines_in_data>
@@ -147,7 +147,7 @@ gtkcheckbutton
 gtkcheckbutton
 </type>
 <content>
-0
+1
 </content>
 
 </check_lines_in_header>

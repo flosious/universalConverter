@@ -270,13 +270,13 @@ G_MODULE_EXPORT void received_clipboard_data() {
 	GtkSelectionData *data = gtk_clipboard_wait_for_contents(clipboard,atom);
 	if (data==NULL) {cout << "NULL" << endl; return;}
 	guchar * text = gtk_selection_data_get_text(data);
-	cout << text_string << endl;
+// 	cout << text_string << endl;
 }
 
 G_MODULE_EXPORT void received_drag_data(/*GtkWidget *widget, GdkDragContext *context, GtkSelectionData *data, guint info, guint time, gpointer user_data*/) {
 // G_MODULE_EXPORT void received_drag_data(GtkWidget *widget, gpointer data) {
 // 	if ((data->length >= 0) /*&& (data->format == 8)*/) {
-		cout << "get data" << endl;
+// 		cout << "get data" << endl;
 // 		const guchar * text = gtk_selection_data_get_data(data);
 		
 // 		cout << *data << endl;
@@ -293,9 +293,11 @@ G_MODULE_EXPORT void received_drop_file_event(GtkWidget *widget, GdkDragContext 
 
 bool print_gtkoverlay_params_to_gtkoverlay() {
 	for (map<string,map<string,string> >::iterator it=gtkoverlay_params.begin(); it!=gtkoverlay_params.end(); ++it) {
+// 		cout << it->first<< "\t"<<it->second["type"]<< "\t" << it->second["content"] << endl;
 		if (it->second["type"]=="gtktextview") {
 			set_gtktextview_content_from_name_as_string(it->first,it->second["content"]);
 		} else if (it->second["type"]=="gtkcheckbutton") {
+// 			cout << it->first << "\t\t" << it->second["content"] << endl;
 			if (it->second["content"]=="1") set_gtkcheckbutton_active(it->first,true);
 			else set_gtkcheckbutton_active(it->first,false);
 		} else if (it->second["type"]=="gtkentry") {
@@ -318,6 +320,7 @@ bool print_gtkoverlay_params_to_gtkoverlay() {
 }
 
 bool set_gtkcheckbutton_active(string widget_name, bool is_active) {
+// 	cout << widget_name << "\t\t" << is_active << endl;
 	GtkToggleButton *togglebutton = GTK_TOGGLE_BUTTON( gtk_builder_get_object (builder, widget_name.c_str()));
 	gtk_toggle_button_set_active(togglebutton, is_active);
 	return true;

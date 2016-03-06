@@ -55,6 +55,7 @@ static int mkpath(string pfad, mode_t mode);
 static int mkpath(string pfad, int delme);  
 #endif
 
+static bool replace_umlaute_to_windows_compatible(string *mainstring);
 
 static vector<vector<string> > unify_2_vectors_to_matrix(vector<string > vector1, vector<string > vector2);
 

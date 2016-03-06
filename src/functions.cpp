@@ -24,7 +24,7 @@
 // global vars //
 // parameter params;
 map<string, string>  config_params;
-vector<vector<string> > overview_conversion;
+vector<vector<string> > overview_conversion; // an overview what was converted: from where to where
 
 // UML - Ablauf
 /*
@@ -127,14 +127,14 @@ bool execute_on_file(string filename) {
 	/*unify the headers to one header matrix*/
 	vector<vector<string> > header = Tools::transform_tensor_unifying_columns_to_matrix(&headers);
 	
-	/*discard lines or columns before parsing*/
+	/*discard lines or columns after parsing*/
 	if (params.output.check_lines_in_header) filter_lines(&header);
 	if (params.output.check_columns_in_header) filter_columns(&header);
 	
 	/*unify the datas to one data matrix*/
 	vector<vector<string> > data = Tools::transform_tensor_unifying_columns_to_matrix(&datas);
 	
-	/*discard lines or columns before parsing*/
+	/*discard lines or columns after parsing*/
 	if (params.output.check_lines_in_data) filter_lines(&data);
 	if (params.output.check_columns_in_data) filter_columns(&data);
 	
@@ -391,6 +391,7 @@ bool load_profile(string profile_name) {
 	string contents;
 	Tools::load_file_to_string(profile_file,&contents);
 	load_xml_to_gtkoverlay_params(&contents);
+	/*hier geht beim übergang von oben nach unten was schief*/
 	print_gtkoverlay_params_to_gtkoverlay();
 }
 
@@ -416,15 +417,21 @@ bool load_xml_to_gtkoverlay_params(string *xml_content) {
 	vector<string> header;
 	vector<string> sub_header;
 	vector<string> sub_content;
-	
-	gtkoverlay_params.clear();
+	string temp;
+	::gtkoverlay_params.clear();
 	if (!Tools::transform_xml_to_vector_string(&content, &header, xml_content)) return false;
 	for (int j=0;j<header.size();j++) {
 		if (!Tools::transform_xml_to_vector_string(&sub_content, &sub_header, &(content.at(j)))) return false;
-	
+		
 		for (int i=0;i<sub_header.size();i++) {
-			gtkoverlay_params[header.at(j)][sub_header.at(i)]=sub_content.at(i);
+			if ((sub_content.at(i)).size()>0) temp = sub_content.at(i);
+			else temp = "";
+			::gtkoverlay_params[header.at(j)][sub_header.at(i)]=temp;
+// 			cout << header.at(j) << "\t\t" << sub_header.at(i) << "\t\t" << temp <<  endl;
+// 			cout << header.at(j) << "\t\t" << sub_header.at(i) << "\t\t" << gtkoverlay_params[header.at(j)][sub_header.at(i)] <<  endl;
 		}
+		sub_header.clear();
+		sub_content.clear();
 	}
 	return true;
 }

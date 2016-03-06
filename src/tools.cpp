@@ -286,6 +286,7 @@ int Tools::mkpath(string pfad, mode_t mode)
 #else
 
 int Tools::mkpath(string path, int delme) {
+	replace_umlaute_to_windows_compatible(&path);
 	string cmd = string("mkdir ") +path;
 	system(cmd.c_str());
 	return 1;
@@ -304,7 +305,12 @@ bool Tools::file_exists(string filename) {
 }
 
 bool Tools::write_to_file(string filename_with_path,string *contents, bool append) {
-// 	cout << "write to: " << filename_with_path << endl;
+// 	cout << filename_with_path << endl;
+  #ifdef __unix__
+#else
+	replace_umlaute_to_windows_compatible(&filename_with_path);
+#endif
+// 	cout << filename_with_path << endl;
 	ofstream myfile;
 	if (append) myfile.open (filename_with_path.c_str(), ios::app);
 	else myfile.open (filename_with_path.c_str());
@@ -315,6 +321,10 @@ bool Tools::write_to_file(string filename_with_path,string *contents, bool appen
 }
 
 bool Tools::load_file_to_string(string filename_with_path, string *contents) {
+  #ifdef __unix__
+#else
+	replace_umlaute_to_windows_compatible(&filename_with_path);
+#endif
 	ifstream myfile;
 	myfile.open (filename_with_path.c_str(),ios::in|ios::binary|ios::ate);
 	if (!myfile.is_open()) return false;
@@ -335,6 +345,10 @@ bool Tools::load_file_to_string(string filename_with_path, string *contents) {
 }
 
 bool Tools::load_file_to_vector_string(string filename_with_path, vector<string> *contents) {
+  #ifdef __unix__
+#else
+	replace_umlaute_to_windows_compatible(&filename_with_path);
+#endif
 	ifstream myfile;
 	string line;
 	myfile.open (filename_with_path.c_str(),ios::in);
@@ -369,9 +383,10 @@ string Tools::format_matrix_to_string(vector<vector<string> > *matrix, string li
 	for (int i=0;i<matrix->size();i++) {
 		if (i!=0) content=content+(line_delimiter);
 		for (int j=0;j<(matrix->at(i)).size();j++) {
-		
-			if (j!=0) content=content +column_delimiter;
-			content=content+((*matrix)[i][j]);
+			if (((*matrix)[i][j]).size()>0) {
+				if (j!=0) content=content +column_delimiter;
+				content=content+((*matrix)[i][j]);
+			}
 		}
 		
 	}
@@ -476,6 +491,19 @@ void Tools::replace_chars_from_string(string *mainstring, string replacethis, st
 		mainstring->replace(mainstring->find(replacethis),replacethis.length(),replacewith);
 	}
 	return;
+}
+
+bool Tools::replace_umlaute_to_windows_compatible(string *mainstring) {
+	
+	replace_chars_from_string(mainstring,"Ä","\x00c4");
+	replace_chars_from_string(mainstring,"Ü","\x00dc");
+	replace_chars_from_string(mainstring,"Ö","\x00d6");
+	replace_chars_from_string(mainstring,"ä","\x00e4");
+	replace_chars_from_string(mainstring,"ü","\x00fc");
+	replace_chars_from_string(mainstring,"ö","\x00f6");
+	replace_chars_from_string(mainstring,"ß","\x00df");
+// 	string result;
+	return true;
 }
 
 string Tools::remove_spaces_from_string(string mainstring) {
