@@ -33,6 +33,7 @@
 #include <string.h>
 
 #include <sys/stat.h>
+#include "print.hpp"
 
 #ifdef __unix__ 
 #include <unistd.h>
@@ -103,7 +104,7 @@ static vector<string> get_all_string_between_string_A_and_next_B(string *mainstr
 
 static string get_string_between_string_A_and_last_B(string *mainstring,string A, string B);
 
-static vector<string> get_strings_between_delimiter(string mainstring, string delimiter);
+static vector<string> get_strings_between_delimiter(string mainstring, string delimiter, bool empty=false);
 
 static double str_to_double(string mainstring);
 

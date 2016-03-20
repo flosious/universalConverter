@@ -371,7 +371,7 @@ vector<vector <string> > Tools::format_string_to_matrix(string *mainstring, stri
 		line = lines[i];
 		Tools::replace_chars_from_string(&(line),"\r",""); // win
 		if (line.length()>0) {
-			columns_in_line = Tools::get_strings_between_delimiter(line,column_delimiter);
+			columns_in_line = Tools::get_strings_between_delimiter(line,column_delimiter,true);
 			matrix.push_back(columns_in_line);
 		}
 	}
@@ -386,6 +386,9 @@ string Tools::format_matrix_to_string(vector<vector<string> > *matrix, string li
 			if (((*matrix)[i][j]).size()>0) {
 				if (j!=0) content=content +column_delimiter;
 				content=content+((*matrix)[i][j]);
+			} else {
+				if (j!=0) content=content +column_delimiter;
+				content=content+"";
 			}
 		}
 		
@@ -429,7 +432,7 @@ string Tools::get_string_between_string_A_and_last_B(string *mainstring,string A
 	return "";
 }
 
-vector<string> Tools::get_strings_between_delimiter(string mainstring, string delimiter) {
+vector<string> Tools::get_strings_between_delimiter(string mainstring, string delimiter, bool empty) {
 	vector<string> results;
 	string temp;
 	temp.clear();
@@ -446,6 +449,8 @@ vector<string> Tools::get_strings_between_delimiter(string mainstring, string de
 	} while (pos_next>=pos_last); // Ende erreicht, kein weiterer Delimiter
 	temp = mainstring.substr(pos_last); // letztes Eement nicht vergessen
 	if (temp.size()>0 && pos_last>=pos_next) results.push_back(temp);  // anders als beim 0. element soll das letzte element nur beachtet werden wenn es nicht leer ist
+	else if (empty) results.push_back("");
+	
 // 	cout << "DEBUG: " << results.back() << ";size: " << (results.back()).size() << endl;
 	}
 	return results;

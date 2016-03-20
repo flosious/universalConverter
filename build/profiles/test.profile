@@ -84,7 +84,7 @@ gtkcheckbutton
 treeview
 </type>
 <content>
-changeme||
+---------------||adsa
 </content>
 
 </REPLACEMENT_TREEVIEW>

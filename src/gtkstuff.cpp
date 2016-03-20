@@ -307,7 +307,6 @@ bool print_gtkoverlay_params_to_gtkoverlay() {
 		} else if (it->second["type"]=="liststore" || it->second["type"]=="treeview") {  //load_matrix_to_liststore
 // 			set_gtkcombobox_pos(it->first,Tools::str_to_int(it->second["content"]));
 			vector<vector<string> > liststore_matrix = Tools::format_string_to_matrix(&(it->second["content"]),"\n",config_params["config_delimiter"]);
-// 			Print::matrix_string(&liststore_matrix);
 // 			remove_lines_from_liststore(GTK_TREE_VIEW ( gtk_builder_get_object (builder, (it->first).c_str())));
 			load_matrix_to_liststore(GTK_TREE_VIEW ( gtk_builder_get_object (builder, (it->first).c_str())),&liststore_matrix);
 		} 
@@ -480,7 +479,10 @@ vector<string> get_liststore_column_entries(GtkTreeView *treeview, int col_num) 
 	GtkTreeModel *model = gtk_tree_view_get_model(treeview);
 	GtkTreeIter iter;
 	string path=string("0"); // "line"
-	if (!gtk_tree_model_get_iter(model, &iter, gtk_tree_path_new_from_string(path.c_str()))) return strings;
+	if (!gtk_tree_model_get_iter(model, &iter, gtk_tree_path_new_from_string(path.c_str()))) {
+	  strings.push_back("");
+	  return strings;
+	}
 	GValue value ={0,};
 	do  { //iterate all lines for this col
 		gtk_tree_model_get_value(model,&iter,col_num,&value);
@@ -533,9 +535,6 @@ bool parse_replacement_liststore() {
 	GtkTreeView *treeview = GTK_TREE_VIEW ( gtk_builder_get_object (builder, widget_name.c_str() ));
 	replace_this_strings=get_liststore_column_entries(treeview,0);
 	replace_with_strings=get_liststore_column_entries(treeview,1);
-	int max_size;
-	if (replace_with_strings.size()<replace_this_strings.size()) max_size=replace_this_strings.size();
-	else max_size=replace_with_strings.size();
 	params.input.replacements=Tools::unify_2_vectors_to_matrix(replace_this_strings,replace_with_strings);
 	gtkoverlay_params[widget_name]["type"]="treeview"; 
 	gtkoverlay_params[widget_name]["content"]=Tools::format_matrix_to_string(&(params.input.replacements),"\n",config_params["config_delimiter"]);
