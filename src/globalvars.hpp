@@ -33,6 +33,8 @@ struct prof {
 	string name;
 	vector<string> list;
 	string action;
+	bool full_auto_tofsims;
+	bool full_auto_dsims;
 };
 
 struct op {

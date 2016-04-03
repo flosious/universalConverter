@@ -84,15 +84,15 @@ gtkcheckbutton
 treeview
 </type>
 <content>
-C	||Concentration	
-I	||Intensity	
 _ELEMENT_PRAEFIX_||
-_ELEMENT_SUFFIX_||_{filename[4]}
 _PARAM_PRAEFIX_||
 _PARAM_SUFFIX_||
 _UNIT_PRAEFIX_||
 _UNIT_SUFFIX_||
+_ELEMENT_SUFFIX_||
 atom/cm3||at/ccm
+C	||Concentration	
+I	||Intensity	
 </content>
 
 </REPLACEMENT_TREEVIEW>
@@ -101,7 +101,7 @@ atom/cm3||at/ccm
 gtktextview
 </type>
 <content>
-1,4,7,10,13,16
+
 </content>
 
 </SPALTEN_TEXTVIEW>
@@ -164,7 +164,7 @@ gtkcheckbutton
 gtkcheckbutton
 </type>
 <content>
-1
+0
 </content>
 
 </full_auto_dsims>
@@ -173,7 +173,7 @@ gtkcheckbutton
 gtkcheckbutton
 </type>
 <content>
-0
+1
 </content>
 
 </full_auto_tofsims>

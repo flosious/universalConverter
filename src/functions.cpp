@@ -94,6 +94,7 @@ bool execution() {
 
 bool filter_replacements(string *contents) {
 	for (int i=0;i<params.input.replacements.size();i++) {
+// 		cout << i << endl;
 		Tools::replace_chars_from_string(contents,params.input.replacements[i][0],params.input.replacements[i][1]);
 	}
 	return true;
@@ -108,8 +109,7 @@ bool execute_on_file(string filename) {
 	/*load file*/
 	if (!Tools::load_file_to_string(filename,&contents)) return false;
 	
-	/*filter replacements from raw content string*/
-	filter_replacements(&contents);
+	
 	
 	/*format content to matrix*/
 	vector<vector<string> > content_matrix = Tools::format_string_to_matrix(&contents,"\n",params.input.data_delimiter);
@@ -124,8 +124,13 @@ bool execute_on_file(string filename) {
 	/*parse the headers and the datas (tensors)*/
 	parse_data_and_header_parts(&content_matrix,&datas,&headers);
 	
+	vector<vector<string> > header;
+	if (params.profile.full_auto_dsims) header=full_auto_dsims(&headers);
+	else if (params.profile.full_auto_tofsims) header=full_auto_tofsims(&headers);
+	else {
 	/*unify the headers to one header matrix*/
-	vector<vector<string> > header = Tools::transform_tensor_unifying_columns_to_matrix(&headers);
+	header = Tools::transform_tensor_unifying_columns_to_matrix(&headers);
+	}
 	
 	/*discard lines or columns after parsing*/
 	if (params.output.check_lines_in_header) filter_lines(&header);
@@ -145,6 +150,8 @@ bool execute_on_file(string filename) {
 	string op_filen =translate_input_to_output(params.output.filename, filename,&header);
 	if (Tools::extract_filename(op_filen,config_params["path_delimiter"],config_params["file_type_delimiter"])=="") op_filen=="";
 	
+	
+	
 	/*translate commands in output format from input filename*/
 	string op_format = translate_input_to_output(gtkoverlay_params["AUSGABEFORMAT_TEXTVIEW"]["content"], filename,&header);
 	
@@ -161,6 +168,16 @@ bool execute_on_file(string filename) {
 	
 	/*create output string*/
 	string output_string = Tools::format_matrix_to_string(&unification,config_params["line_delimiter"],params.output.data_delimiter);
+	
+	/*translate commands in output directory form input filename*/
+// 	string op_dir = translate_input_to_output(params.output.directory,filename,&header);
+	for (int i=0;i<params.input.replacements.size();i++) {
+		params.input.replacements[i][1]=translate_input_to_output(params.input.replacements[i][1],filename,&header);
+// 		cout << params.input.replacements[i][1] << endl;
+	}
+	/*filter replacements from raw content string*/
+// 	cout << "filter replacements" << endl;
+	filter_replacements(&output_string);
 	
 	/*if no output filename, set filename of input as default*/
 	if (op_filen=="") {
@@ -198,6 +215,95 @@ bool execute_on_file(string filename) {
 	return true;
 }
 
+vector<vector<string> > full_auto_tofsims(vector<vector<vector<string> > > *headers) {
+	int c=0;
+	int elements_line_number=(headers->at(c)).size()-3;
+	int isotopenumber_line_number=(headers->at(c)).size()-2;
+	int params_units_line_number=(headers->at(c)).size()-1;
+	vector<vector<string> > header;
+	
+	/*remove "#" and "+" or "-" */
+	for (int j=0; j<(headers->at(c)).size();j++) {
+		(headers->at(c))[j][0]=Tools::remove_chars_from_string((headers->at(c))[j][0],"#");
+	}
+	for (int j=0; j<(headers->at(c)[elements_line_number]).size();j++) {
+		(headers->at(c))[elements_line_number][j]=Tools::remove_chars_from_string((headers->at(c))[elements_line_number][j],"+-");
+// 		(headers->at(c))[elements_line_number][j]=Tools::remove_chars_from_string((headers->at(c))[elements_line_number][j],"-");
+	}
+	
+	vector<string> elements;
+	for (int i=0;i<((headers->at(c))[elements_line_number]).size();i++) {
+		if (( (headers->at(c))[elements_line_number][i]).size()>0 ) {
+			elements.push_back((headers->at(c))[elements_line_number][i]);
+		}
+	}
+	
+	vector<string> units, parameters;
+	for (int i=0;i<((headers->at(c))[params_units_line_number]).size();i++) {
+		if ((((headers->at(c))[params_units_line_number])[i]).size()>0) {
+			units.push_back(Tools::get_string_between_string_A_and_next_B(&((headers->at(c))[params_units_line_number][i]),"(",")"));
+			parameters.push_back((Tools::get_strings_between_delimiter(((headers->at(c))[params_units_line_number][i]),"(")).at(0));
+		}
+	}
+	if (units.size()!=parameters.size()) {
+		show_error_box("size of units and parameters not equal");
+		return header;
+	}
+	
+	vector<string> unit_line,param_line,elements_line;
+	elements_line.push_back(""); // 1st element is awlays empty
+	for (int i=0;i<units.size();i++) {
+		unit_line.push_back(string("_UNIT_PRAEFIX_")+units[i]+string("_UNIT_SUFFIX_"));
+		param_line.push_back(string("_PARAM_PRAEFIX_")+parameters[i]+string("_PARAM_SUFFIX_"));
+		if (i>0) elements_line.push_back(string("_ELEMENT_PRAEFIX_")+elements[(i-1)/((units.size()-1)/elements.size())]+string("_ELEMENT_SUFFIX_")); // every 2nd is another element/complex/cluster
+	}
+	header.push_back(elements_line);
+	header.push_back(param_line);
+	header.push_back(unit_line);
+	return header;
+}
+
+vector<vector<string> > full_auto_dsims(vector<vector<vector<string> > > *headers) {
+	int c=0;
+	int elements_line_number=(headers->at(c)).size()-2;
+	int params_units_line_number=(headers->at(c)).size()-1;
+	vector<vector<string> > header;
+	
+	vector<string> elements;
+	for (int i=0;i<((headers->at(c))[elements_line_number]).size();i++) {
+		if (( (headers->at(c))[elements_line_number][i]).size()>0 ) {
+// 		  
+			elements.push_back((headers->at(c))[elements_line_number][i]);
+		}
+	}
+	
+	
+	vector<string> units, parameters;
+	for (int i=0;i<((headers->at(c))[params_units_line_number]).size();i++) {
+		if ((((headers->at(c))[params_units_line_number])[i]).size()>0) {
+			units.push_back(Tools::get_string_between_string_A_and_next_B(&((headers->at(c))[params_units_line_number][i]),"[","]"));
+			parameters.push_back((Tools::get_strings_between_delimiter(((headers->at(c))[params_units_line_number][i]),"[")).at(0));
+		}
+	}
+	
+	if (units.size()!=parameters.size()) {
+		show_error_box("size of units and parameters not equal");
+		return header;
+	}
+	
+	
+	vector<string> unit_line,param_line,elements_line;
+	for (int i=0;i<units.size();i++) {
+		unit_line.push_back(string("_UNIT_PRAEFIX_")+units[i]+string("_UNIT_SUFFIX_"));
+		param_line.push_back(string("_PARAM_PRAEFIX_")+parameters[i]+string("_PARAM_SUFFIX_"));
+		elements_line.push_back(string("_ELEMENT_PRAEFIX_")+elements[i/3]+string("_ELEMENT_SUFFIX_")); // every 3rd element is a new dependency -> another element/complex/cluster
+	}
+	header.push_back(elements_line);
+	header.push_back(param_line);
+	header.push_back(unit_line);
+	return header;
+}
+
 string check_directory_string(string directory) {
 	if (directory=="") {
 		directory.append(".");
@@ -232,6 +338,7 @@ string translate_input_to_output (string format, string input_filename, vector<v
 		if (parts.size()>0) part= parts[0];
 		string cmd = Tools::get_strings_between_delimiter(output_filename_placeholders[i],"[").front();
 		cmd = Tools::remove_spaces_from_string(cmd);
+// 		cout << cmd << endl;
 		/*look for replacers in input_filename_parts*/
 		if (cmd=="filename") {
 			if (part>=0 && part<input_filename_parts.size())

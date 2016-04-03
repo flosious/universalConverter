@@ -84,15 +84,15 @@ gtkcheckbutton
 treeview
 </type>
 <content>
-C	||Concentration	
-I	||Intensity	
 _ELEMENT_PRAEFIX_||
-_ELEMENT_SUFFIX_||_{filename[4]}
 _PARAM_PRAEFIX_||
 _PARAM_SUFFIX_||
 _UNIT_PRAEFIX_||
 _UNIT_SUFFIX_||
+_ELEMENT_SUFFIX_||
 atom/cm3||at/ccm
+C	||Concentration	
+I	||Intensity	
 </content>
 
 </REPLACEMENT_TREEVIEW>

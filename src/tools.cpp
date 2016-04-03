@@ -475,6 +475,12 @@ int Tools::str_to_int(string mainstring) {
 }
 
 int Tools::is_number(std::string str) {
+	if (count(str.begin(),str.end(),'-')>1) return 0;
+	if (count(str.begin(),str.end(),'+')>1) return 0;
+	if (count(str.begin(),str.end(),'.')>1) return 0;
+	if (count(str.begin(),str.end(),',')>1) return 0;
+	if (count(str.begin(),str.end(),'e')>1) return 0;
+	if (count(str.begin(),str.end(),'E')>1) return 0;
 	if (str.find_first_not_of("0123456789eE.,+-") == std::string::npos) return 1;
 	return 0; //scientific notation enthaelt E(A) = 10^A
 }
@@ -492,8 +498,10 @@ string Tools::replace_chars_from_string(string mainstring, string replacethis, s
 
 void Tools::replace_chars_from_string(string *mainstring, string replacethis, string replacewith) {
 	if (!(replacethis.length()>0))  return;
-	while ( (mainstring->find(replacethis)!=string::npos) ) {
-		mainstring->replace(mainstring->find(replacethis),replacethis.length(),replacewith);
+	int last_pos=mainstring->find(replacethis);
+	while ( (last_pos!=string::npos) ) {
+		mainstring->replace(last_pos,replacethis.length(),replacewith);
+		last_pos=mainstring->find(replacethis,last_pos+replacewith.length());
 	}
 	return;
 }

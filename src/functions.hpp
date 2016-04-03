@@ -43,6 +43,10 @@ using namespace std;
 
 // string translate_input_to_output_filename (string output_filename, string input_filename);
 
+vector<vector<string> > full_auto_dsims(vector<vector<vector<string> > > *headers);
+
+vector<vector<string> > full_auto_tofsims(vector<vector<vector<string> > > *headers);
+
 string check_directory_string(string directory);
 
 string translate_input_to_output (string input_filename, string format, vector<vector<string> > *header_matrix);

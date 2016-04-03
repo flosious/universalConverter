@@ -559,6 +559,9 @@ bool parse_buttons() {
 	params.output.check_lines_in_data=get_button_state_by_name("check_lines_in_data");
 	params.output.check_columns_in_header=get_button_state_by_name("check_columns_in_header");
 	params.output.check_columns_in_data=get_button_state_by_name("check_columns_in_data");
+// // 	
+	params.profile.full_auto_tofsims=get_button_state_by_name("full_auto_tofsims");
+	params.profile.full_auto_dsims=get_button_state_by_name("full_auto_dsims");
 	return true;
 }  
   
