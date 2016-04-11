@@ -42,7 +42,8 @@ G_MODULE_EXPORT void add_line_to_gtktreeview() {
 		
 	GtkListStore *liststore=GTK_LIST_STORE ( gtk_builder_get_object (builder, "liststore2")); 
 	GtkTreeIter *iter=NULL;
-	gtk_list_store_insert_with_values (liststore, iter,-1,0,"changeme",1,"changeme",-1);
+// 	gtk_list_store_insert_with_values (liststore, iter,-1,0,"changeme",1,"changeme",-1);
+	gtk_list_store_insert_with_values (liststore, iter,-1,0,0,1,"changeme",2,"changeme",-1);
 	
 }
 
@@ -128,6 +129,29 @@ G_MODULE_EXPORT void replacements_edited(GtkCellRendererText *renderer,gchar *pa
 
 }
 
+G_MODULE_EXPORT void replacements_edited_int(GtkCellRendererText *renderer,gchar *path,gchar *new_text,gpointer user_data) {
+// 	cout << "text: " << new_text << endl;
+// 	cout << "path: " << path << endl;
+	GtkTreeView *treeview = GTK_TREE_VIEW ( gtk_builder_get_object (builder, "REPLACEMENT_TREEVIEW"));
+	GtkListStore *liststore=GTK_LIST_STORE ( gtk_builder_get_object (builder, "liststore2")); 
+	GtkTreeModel *model = gtk_tree_view_get_model(treeview);
+	GtkTreeIter   iter;
+	int columnd_id=get_col_number_from_tree_view_column((GtkTreeViewColumn*)user_data);
+	
+	if (!gtk_tree_model_get_iter(model, &iter, gtk_tree_path_new_from_string(path)))
+	      return; /* path describes a non-existing row - should not happen */
+// 	if (renderer == GTK_CELL_RENDERER ( gtk_builder_get_object (builder, "cellrenderertext3"))  columnd_id=0;
+// 	else columnd_id=1;
+	    
+	GValue dumps = {0,}; // 0 initialisierung, extrem wichtig!!!11
+	g_value_init (&dumps, G_TYPE_INT);
+	g_value_set_int(&dumps,Tools::str_to_int(new_text));
+			
+	    
+	gtk_list_store_set_value(liststore,&iter,columnd_id, &dumps);
+
+}
+
 G_MODULE_EXPORT void create_replacement_table() {
 	
 	/*iter*/
@@ -143,9 +167,11 @@ G_MODULE_EXPORT void create_replacement_table() {
 	/*columns*/
 	GtkTreeViewColumn *col0 = gtk_tree_view_get_column(treeview,0);
 	GtkTreeViewColumn *col1 = gtk_tree_view_get_column(treeview,1);
+	GtkTreeViewColumn *col2 = gtk_tree_view_get_column(treeview,2);
 	/*cellrenderer*/
-	GtkCellRenderer *renderer0 = GTK_CELL_RENDERER ( gtk_builder_get_object (builder, "cellrenderertext3"));
-	GtkCellRenderer *renderer1 = GTK_CELL_RENDERER ( gtk_builder_get_object (builder, "cellrenderertext4"));
+	GtkCellRenderer *renderer1 = GTK_CELL_RENDERER ( gtk_builder_get_object (builder, "cellrenderertext3"));
+	GtkCellRenderer *renderer2 = GTK_CELL_RENDERER ( gtk_builder_get_object (builder, "cellrenderertext4"));
+	GtkCellRenderer *renderer0 = GTK_CELL_RENDERER ( gtk_builder_get_object (builder, "cellrenderertext5"));
 	
 	/*column titles and types*/
 // 	gtk_tree_view_insert_column_with_attributes (treeview,-1,"replace this",renderer0,"text",0,NULL);
@@ -153,6 +179,7 @@ G_MODULE_EXPORT void create_replacement_table() {
 	
 	g_object_set(renderer0, "editable", TRUE, NULL); 
 	g_object_set(renderer1, "editable", TRUE, NULL);
+	g_object_set(renderer2, "editable", TRUE, NULL);
 	
 	/*liststore*/
 	GtkListStore *liststore = GTK_LIST_STORE( gtk_builder_get_object (builder, "liststore2"));

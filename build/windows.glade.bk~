@@ -167,8 +167,6 @@
   </object>
   <object class="GtkListStore" id="liststore2">
     <columns>
-      <!-- column-name order -->
-      <column type="gint64"/>
       <!-- column-name this -->
       <column type="gchararray"/>
       <!-- column-name with -->
@@ -556,23 +554,6 @@
                                       <object class="GtkTreeSelection" id="treeview-selection1"/>
                                     </child>
                                     <child>
-                                      <object class="GtkTreeViewColumn" id="treeviewcolumn3">
-                                        <property name="resizable">True</property>
-                                        <property name="title" translatable="yes">order</property>
-                                        <property name="clickable">True</property>
-                                        <property name="reorderable">True</property>
-                                        <property name="sort_indicator">True</property>
-                                        <child>
-                                          <object class="GtkCellRendererText" id="cellrenderertext5">
-                                            <signal name="edited" handler="replacements_edited_int" object="treeviewcolumn3" swapped="no"/>
-                                          </object>
-                                          <attributes>
-                                            <attribute name="text">0</attribute>
-                                          </attributes>
-                                        </child>
-                                      </object>
-                                    </child>
-                                    <child>
                                       <object class="GtkTreeViewColumn" id="treeviewcolumn1">
                                         <property name="resizable">True</property>
                                         <property name="title" translatable="yes">replace this</property>
@@ -584,7 +565,7 @@
                                             <signal name="edited" handler="replacements_edited" object="treeviewcolumn1" swapped="no"/>
                                           </object>
                                           <attributes>
-                                            <attribute name="text">1</attribute>
+                                            <attribute name="text">0</attribute>
                                           </attributes>
                                         </child>
                                       </object>
@@ -601,7 +582,7 @@
                                             <signal name="edited" handler="replacements_edited" object="treeviewcolumn2" swapped="no"/>
                                           </object>
                                           <attributes>
-                                            <attribute name="text">2</attribute>
+                                            <attribute name="text">1</attribute>
                                           </attributes>
                                         </child>
                                       </object>

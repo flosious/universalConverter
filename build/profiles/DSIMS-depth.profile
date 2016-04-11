@@ -90,9 +90,9 @@ _PARAM_SUFFIX_||
 _UNIT_PRAEFIX_||
 _UNIT_SUFFIX_||
 _ELEMENT_SUFFIX_||
+C||Concentration	
+I||Intensity	
 atom/cm3||at/ccm
-C	||Concentration	
-I	||Intensity	
 </content>
 
 </REPLACEMENT_TREEVIEW>

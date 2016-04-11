@@ -171,6 +171,7 @@ bool execute_on_file(string filename) {
 	
 	/*translate commands in output directory form input filename*/
 // 	string op_dir = translate_input_to_output(params.output.directory,filename,&header);
+	parameter params_backup=params;
 	for (int i=0;i<params.input.replacements.size();i++) {
 		params.input.replacements[i][1]=translate_input_to_output(params.input.replacements[i][1],filename,&header);
 // 		cout << params.input.replacements[i][1] << endl;
@@ -211,6 +212,9 @@ bool execute_on_file(string filename) {
 	
 	/*write output string to file*/
 	Tools::write_to_file(filename_with_path,&output_string,false);
+	
+	/*reset params to old value*/
+	params=params_backup;
 	
 	return true;
 }
@@ -254,12 +258,19 @@ vector<vector<string> > full_auto_tofsims(vector<vector<vector<string> > > *head
 	elements_line.push_back(""); // 1st element is awlays empty
 	for (int i=0;i<units.size();i++) {
 		unit_line.push_back(string("_UNIT_PRAEFIX_")+units[i]+string("_UNIT_SUFFIX_"));
-		param_line.push_back(string("_PARAM_PRAEFIX_")+parameters[i]+string("_PARAM_SUFFIX_"));
+		if (i==0) param_line.push_back(string("_PARAM_PRAEFIX_")+parameters[i]+string("_PARAM_SUFFIX_"));
+		else  param_line.push_back(string("_PARAM_PRAEFIX_")+elements[(i-1)/((units.size()-1)/elements.size())]+string(" ")+parameters[i]+string("_PARAM_SUFFIX_"));
 		if (i>0) elements_line.push_back(string("_ELEMENT_PRAEFIX_")+elements[(i-1)/((units.size()-1)/elements.size())]+string("_ELEMENT_SUFFIX_")); // every 2nd is another element/complex/cluster
 	}
-	header.push_back(elements_line);
+	
 	header.push_back(param_line);
+	
 	header.push_back(unit_line);
+	
+	header.push_back(elements_line);
+	
+	
+	
 	return header;
 }
 
@@ -272,8 +283,14 @@ vector<vector<string> > full_auto_dsims(vector<vector<vector<string> > > *header
 	vector<string> elements;
 	for (int i=0;i<((headers->at(c))[elements_line_number]).size();i++) {
 		if (( (headers->at(c))[elements_line_number][i]).size()>0 ) {
-// 		  
-			elements.push_back((headers->at(c))[elements_line_number][i]);
+// 		  	std::stringstream temp((headers->at(c))[elements_line_number][i]);
+// 			int temp_int;
+// 			string temp_string;
+// 			temp >> temp_string >> temp_int;
+// 			string result;
+// 			result = string("\\+(")+to_string(temp_int)+string(")")+temp_string;
+			string result = ((headers->at(c))[elements_line_number][i]);
+			elements.push_back(result);
 		}
 	}
 	
@@ -294,13 +311,16 @@ vector<vector<string> > full_auto_dsims(vector<vector<vector<string> > > *header
 	
 	vector<string> unit_line,param_line,elements_line;
 	for (int i=0;i<units.size();i++) {
+		
 		unit_line.push_back(string("_UNIT_PRAEFIX_")+units[i]+string("_UNIT_SUFFIX_"));
-		param_line.push_back(string("_PARAM_PRAEFIX_")+parameters[i]+string("_PARAM_SUFFIX_"));
+		param_line.push_back(string("_PARAM_PRAEFIX_")+elements[i/3]+string(" ")+parameters[i]+string("_PARAM_SUFFIX_"));
+// 		param_line.push_back(string("_PARAM_PRAEFIX_")+parameters[i]+string("_PARAM_SUFFIX_"));
 		elements_line.push_back(string("_ELEMENT_PRAEFIX_")+elements[i/3]+string("_ELEMENT_SUFFIX_")); // every 3rd element is a new dependency -> another element/complex/cluster
 	}
-	header.push_back(elements_line);
 	header.push_back(param_line);
 	header.push_back(unit_line);
+	header.push_back(elements_line);
+	
 	return header;
 }
 
