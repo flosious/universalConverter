@@ -120,6 +120,8 @@ static string remove_linebreakers_from_string(string mainstring); // remove_line
 
 static string remove_chars_from_string(string mainstring, string chars);
 
+static vector<vector<string> > add_vector_to_matrix(vector<vector<string > > matrix_summand, vector<string > vec);
+
 };
 
 #endif // TOOLS_HPP

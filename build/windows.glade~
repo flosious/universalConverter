@@ -564,7 +564,7 @@
                                         <property name="sort_indicator">True</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext5">
-                                            <signal name="edited" handler="replacements_edited_int" swapped="no"/>
+                                            <signal name="edited" handler="replacements_edited_int" object="treeviewcolumn3" swapped="no"/>
                                           </object>
                                           <attributes>
                                             <attribute name="text">0</attribute>

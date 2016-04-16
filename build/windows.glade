@@ -168,7 +168,7 @@
   <object class="GtkListStore" id="liststore2">
     <columns>
       <!-- column-name order -->
-      <column type="gint64"/>
+      <column type="gint"/>
       <!-- column-name this -->
       <column type="gchararray"/>
       <!-- column-name with -->

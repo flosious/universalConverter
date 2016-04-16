@@ -98,6 +98,14 @@ vector<vector<string> > Tools::unify_2_vectors_to_matrix(vector<string > vector1
 	return matrix;
 }
 
+vector<vector<string> > Tools::add_vector_to_matrix(vector<vector<string > > matrix_summand, vector<string > vec) {
+	
+	vector<vector<string> > matrix_T=Tools::transpose_matrix(&matrix_summand);
+	matrix_T.push_back(vec);
+	
+	return Tools::transpose_matrix(&matrix_T);
+}
+
 vector<vector<string> > Tools::transform_tensor_unifying_lines_to_matrix(vector<vector<vector<string> > > *tensor) {
 	vector<vector<string> > result_matrix;
 	for (int i=0;i<tensor->size();i++) {

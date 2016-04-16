@@ -87,9 +87,11 @@ G_MODULE_EXPORT void save_profile_button_clicked(GtkWidget *widget, gpointer dat
   
 G_MODULE_EXPORT void activate_overwrite_protection(GtkWidget *widget, gpointer data);  
 
-bool load_matrix_to_liststore(GtkTreeView *treeview, vector<vector<string> > *matrix);
+bool load_matrix_to_liststore(string treeview_name, vector<vector<string> > *matrix);
 
 bool parse_replacement_liststore();
+
+vector<string> get_liststore_column_entries(GtkTreeView *treeview, int col_num,string type="string");
 
 bool set_gtktextview_content_from_name_as_string(string widget_name,string content);
 

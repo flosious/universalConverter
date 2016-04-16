@@ -335,7 +335,8 @@ bool print_gtkoverlay_params_to_gtkoverlay() {
 // 			set_gtkcombobox_pos(it->first,Tools::str_to_int(it->second["content"]));
 			vector<vector<string> > liststore_matrix = Tools::format_string_to_matrix(&(it->second["content"]),"\n",config_params["config_delimiter"]);
 // 			remove_lines_from_liststore(GTK_TREE_VIEW ( gtk_builder_get_object (builder, (it->first).c_str())));
-			load_matrix_to_liststore(GTK_TREE_VIEW ( gtk_builder_get_object (builder, (it->first).c_str())),&liststore_matrix);
+// 			load_matrix_to_liststore(GTK_TREE_VIEW ( gtk_builder_get_object (builder, (it->first).c_str())),&liststore_matrix);
+			load_matrix_to_liststore(it->first,&liststore_matrix);
 		} 
 		
 		else {
@@ -501,7 +502,7 @@ bool parse_output_format() {
 // }
 //   
 
-vector<string> get_liststore_column_entries(GtkTreeView *treeview, int col_num) {
+vector<string> get_liststore_column_entries(GtkTreeView *treeview, int col_num,string type) {
 	vector<string> strings;
 	GtkTreeModel *model = gtk_tree_view_get_model(treeview);
 	GtkTreeIter iter;
@@ -510,16 +511,27 @@ vector<string> get_liststore_column_entries(GtkTreeView *treeview, int col_num) 
 	  strings.push_back("");
 	  return strings;
 	}
-	GValue value ={0,};
+// 	GValue value ={0,};
+	
 	do  { //iterate all lines for this col
+		GValue value ={};
 		gtk_tree_model_get_value(model,&iter,col_num,&value);
-		strings.push_back(g_value_get_string(&value));
+		if (type=="string") strings.push_back(g_value_get_string(&value));
+		else { 
+		  
+			string val=to_string(g_value_get_int(&value));
+			strings.push_back(val);
+// 			cout << g_value_get_int(&value) << endl;			
+		}
+		g_value_unset(&value);
 	} while (gtk_tree_model_iter_next(model,&iter));
-	g_value_unset(&value);
+	
 	return strings;
 }
 
-bool load_matrix_to_liststore(GtkTreeView *treeview, vector<vector<string> > *matrix) {
+// bool load_matrix_to_liststore(GtkTreeView *treeview, vector<vector<string> > *matrix) {
+bool load_matrix_to_liststore(string treeview_name, vector<vector<string> > *matrix) {
+	GtkTreeView *treeview = GTK_TREE_VIEW ( gtk_builder_get_object (builder, (treeview_name).c_str()));
 	GtkTreeModel *model = gtk_tree_view_get_model(treeview);
 // 	cout << "Removelines begin" << endl;
 	remove_lines_from_liststore(treeview);
@@ -545,8 +557,15 @@ bool load_matrix_to_liststore(GtkTreeView *treeview, vector<vector<string> > *ma
 		memset (dumps, 0, sizeof (GValue) * size);
 		for (int j=0;j<size;j++) {
 			pos[j]=j;
-			g_value_init (&(dumps[j]), G_TYPE_STRING);
-			g_value_set_string (&(dumps[j]), ((matrix->at(i))[j]).c_str());
+			if (j==0 && treeview_name=="REPLACEMENT_TREEVIEW") {
+			  g_value_init (&(dumps[j]), G_TYPE_INT);
+			  g_value_set_int (&(dumps[j]), Tools::str_to_int(((matrix->at(i))[j]).c_str()));
+			}
+			else {
+			  g_value_init (&(dumps[j]), G_TYPE_STRING);
+			  g_value_set_string (&(dumps[j]), ((matrix->at(i))[j]).c_str());  
+			}
+			
 		}
 		gtk_list_store_insert_with_valuesv (liststore, NULL,-1,const_cast<gint*>(pos),dumps,size);
 // 		cout << "End: " << i << endl;
@@ -560,9 +579,13 @@ bool parse_replacement_liststore() {
 	vector<string> replace_this_strings;
 	vector<string> replace_with_strings;
 	GtkTreeView *treeview = GTK_TREE_VIEW ( gtk_builder_get_object (builder, widget_name.c_str() ));
-	replace_this_strings=get_liststore_column_entries(treeview,0);
-	replace_with_strings=get_liststore_column_entries(treeview,1);
-	params.input.replacements=Tools::unify_2_vectors_to_matrix(replace_this_strings,replace_with_strings);
+	vector<string>replacement_id=get_liststore_column_entries(treeview,0,"int");
+	replace_this_strings=get_liststore_column_entries(treeview,1);
+	replace_with_strings=get_liststore_column_entries(treeview,2);
+	params.input.replacements=Tools::add_vector_to_matrix(Tools::unify_2_vectors_to_matrix(replacement_id,replace_this_strings),replace_with_strings);
+	
+// 	Print::matrix_string(&params.input.replacements);
+	
 	gtkoverlay_params[widget_name]["type"]="treeview"; 
 	gtkoverlay_params[widget_name]["content"]=Tools::format_matrix_to_string(&(params.input.replacements),"\n",config_params["config_delimiter"]);
 	return true;
