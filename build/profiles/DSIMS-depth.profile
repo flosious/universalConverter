@@ -12,7 +12,7 @@ gtktextview
 gtkentry
 </type>
 <content>
-
+/tmp/
 </content>
 
 </AUSGABEVERZEICHNIS_ENTRY>
@@ -39,7 +39,7 @@ tabulator
 gtkentry
 </type>
 <content>
-_
+
 </content>
 
 </INPUT_FILE_NAME_DELIMITER_ENTRY>
@@ -84,8 +84,7 @@ gtkcheckbutton
 treeview
 </type>
 <content>
-6||das||asdasd
-1||zrtz||yxcb
+0||_PARAM_PRAEFIX_||
 </content>
 
 </REPLACEMENT_TREEVIEW>
@@ -94,7 +93,7 @@ treeview
 gtktextview
 </type>
 <content>
-1,4,7,10,13,16
+
 </content>
 
 </SPALTEN_TEXTVIEW>
@@ -121,7 +120,7 @@ gtktextview
 gtkcheckbutton
 </type>
 <content>
-1
+0
 </content>
 
 </check_columns_in_data>
@@ -130,7 +129,7 @@ gtkcheckbutton
 gtkcheckbutton
 </type>
 <content>
-1
+0
 </content>
 
 </check_columns_in_header>
