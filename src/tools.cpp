@@ -102,7 +102,6 @@ vector<vector<string> > Tools::add_vector_to_matrix(vector<vector<string > > mat
 	
 	vector<vector<string> > matrix_T=Tools::transpose_matrix(&matrix_summand);
 	matrix_T.push_back(vec);
-	
 	return Tools::transpose_matrix(&matrix_T);
 }
 

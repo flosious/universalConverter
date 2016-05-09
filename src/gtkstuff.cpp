@@ -574,6 +574,7 @@ bool load_matrix_to_liststore(string treeview_name, vector<vector<string> > *mat
 }
 
 bool parse_replacement_liststore() {
+
 // 	vector<vector<string> > matrix;
 	string widget_name="REPLACEMENT_TREEVIEW";
 	vector<string> replace_this_strings;
@@ -582,9 +583,8 @@ bool parse_replacement_liststore() {
 	vector<string>replacement_id=get_liststore_column_entries(treeview,0,"int");
 	replace_this_strings=get_liststore_column_entries(treeview,1);
 	replace_with_strings=get_liststore_column_entries(treeview,2);
-// 	params.input.replacements=Tools::add_vector_to_matrix(Tools::unify_2_vectors_to_matrix(replacement_id,replace_this_strings),replace_with_strings);
-	params.input.replacements=Tools::unify_2_vectors_to_matrix(replace_this_strings,replace_with_strings);
-	
+	params.input.replacements=Tools::add_vector_to_matrix(Tools::unify_2_vectors_to_matrix(replacement_id,replace_this_strings),replace_with_strings);
+// 	params.input.replacements=Tools::unify_2_vectors_to_matrix(replace_this_strings,replace_with_strings);
 // 	Print::matrix_string(&params.input.replacements);
 	
 	gtkoverlay_params[widget_name]["type"]="treeview"; 
