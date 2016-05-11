@@ -66,7 +66,7 @@ tabulator
 gtkentry
 </type>
 <content>
-
+converted.txt
 </content>
 
 </OUTPUT_NAME_ENTRY>
@@ -84,6 +84,7 @@ gtkcheckbutton
 treeview
 </type>
 <content>
+0||_PARAM_PRAEFIX_||
 1||x||6
 5||xx||4564
 2||xxx||242647
@@ -95,7 +96,7 @@ treeview
 gtktextview
 </type>
 <content>
-
+1,4,7,10,13
 </content>
 
 </SPALTEN_TEXTVIEW>
@@ -122,7 +123,7 @@ gtktextview
 gtkcheckbutton
 </type>
 <content>
-0
+1
 </content>
 
 </check_columns_in_data>
@@ -131,7 +132,7 @@ gtkcheckbutton
 gtkcheckbutton
 </type>
 <content>
-0
+1
 </content>
 
 </check_columns_in_header>

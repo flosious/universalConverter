@@ -95,7 +95,7 @@ bool execution() {
 bool filter_replacements(string *contents) {
 	for (int i=0;i<params.input.replacements.size();i++) {
 // 		cout << i << endl;
-		Tools::replace_chars_from_string(contents,params.input.replacements[i][0],params.input.replacements[i][1]);
+		Tools::replace_chars_from_string(contents,params.input.replacements[i][1],params.input.replacements[i][2]);
 	}
 	return true;
 }
