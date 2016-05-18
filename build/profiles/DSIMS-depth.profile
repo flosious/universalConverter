@@ -39,7 +39,7 @@ tabulator
 gtkentry
 </type>
 <content>
-
+_
 </content>
 
 </INPUT_FILE_NAME_DELIMITER_ENTRY>
@@ -84,7 +84,7 @@ gtkcheckbutton
 treeview
 </type>
 <content>
-0||_PARAM_PRAEFIX_||
+0||_PARAM_PRAEFIX_||{filename[1]}
 1||x||6
 5||xx||4564
 2||xxx||242647

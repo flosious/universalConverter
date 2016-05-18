@@ -173,7 +173,7 @@ bool execute_on_file(string filename) {
 // 	string op_dir = translate_input_to_output(params.output.directory,filename,&header);
 	parameter params_backup=params;
 	for (int i=0;i<params.input.replacements.size();i++) {
-		params.input.replacements[i][1]=translate_input_to_output(params.input.replacements[i][1],filename,&header);
+		params.input.replacements[i][2]=translate_input_to_output(params.input.replacements[i][2],filename,&header);
 // 		cout << params.input.replacements[i][1] << endl;
 	}
 	/*filter replacements from raw content string*/
@@ -313,8 +313,9 @@ vector<vector<string> > full_auto_dsims(vector<vector<vector<string> > > *header
 	for (int i=0;i<units.size();i++) {
 		
 		unit_line.push_back(string("_UNIT_PRAEFIX_")+units[i]+string("_UNIT_SUFFIX_"));
+// 		if (i%3==2) param_line.push_back(string("_PARAM_PRAEFIX_")+elements[i/3]+string(" ")+parameters[i]+string("_PARAM_SUFFIX_"));
+// 		else param_line.push_back(string("_PARAM_PRAEFIX_")+parameters[i]+string("_PARAM_SUFFIX_"));
 		param_line.push_back(string("_PARAM_PRAEFIX_")+elements[i/3]+string(" ")+parameters[i]+string("_PARAM_SUFFIX_"));
-// 		param_line.push_back(string("_PARAM_PRAEFIX_")+parameters[i]+string("_PARAM_SUFFIX_"));
 		elements_line.push_back(string("_ELEMENT_PRAEFIX_")+elements[i/3]+string("_ELEMENT_SUFFIX_")); // every 3rd element is a new dependency -> another element/complex/cluster
 	}
 	header.push_back(param_line);
