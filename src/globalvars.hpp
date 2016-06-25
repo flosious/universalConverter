@@ -43,6 +43,7 @@ struct op {
 	string data_delimiter;
 	vector< vector<string> > format;
 	bool overwrite_protection;
+	bool merge_op;
 // 	bool check_lines_after_parsing;
 // 	bool check_columns_after_parsing;
 	bool check_lines_in_header;
@@ -74,6 +75,7 @@ struct parameter {
 extern map<string, string>   config_params;
 extern parameter params; // parsed parameters from overlay
 extern map<string, map<string, string> >   gtkoverlay_params; // raw overlay parameters for saving
+extern vector<vector<string> > merged_unifications;
 // gtkoverlay_params[widget_name]["type"]=$type 
 // gtkoverlay_params[widget_name]["content"]=$content 
 

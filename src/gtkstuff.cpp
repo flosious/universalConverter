@@ -42,20 +42,17 @@ G_MODULE_EXPORT void add_line_to_gtktreeview() {
 		
 	GtkListStore *liststore=GTK_LIST_STORE ( gtk_builder_get_object (builder, "liststore2")); 
 	GtkTreeIter *iter=NULL;
-// 	gtk_list_store_insert_with_values (liststore, iter,-1,0,"changeme",1,"changeme",-1);
 	gtk_list_store_insert_with_values (liststore, iter,-1,0,0,1,"changeme",2,"changeme",-1);
 	
 }
 
 void remove_rows(GtkTreePath *path) {
 	GtkTreeView *treeview = GTK_TREE_VIEW ( gtk_builder_get_object (builder, "REPLACEMENT_TREEVIEW"));
-// 	GtkListStore *liststore=GTK_LIST_STORE ( gtk_builder_get_object (builder, "liststore2")); 
 	GtkTreeModel *model = gtk_tree_view_get_model(treeview);
 	GtkTreeIter   iter,child_iter;
 	
 	if (!gtk_tree_model_get_iter(model, &iter, path))
 	      return; /* path describes a non-existing row - should not happen */
-// 	      gtk_tree_model_sort_convert_iter_to_child_iter(model,&child_iter,&iter);
 	gtk_list_store_remove(GTK_LIST_STORE(model), &iter); 
 }
 
@@ -605,6 +602,7 @@ bool get_button_state_by_name(string widget_name) {
   
 bool parse_buttons() {
 	params.output.overwrite_protection=get_button_state_by_name("WRITEPROTECTION_CHECKBUTTON");
+	params.output.merge_op=get_button_state_by_name("MERGE_BUTTON");
 	params.input.remove_headers=get_button_state_by_name("REMOVE_HEADER_CHECKBUTTON");
 	params.output.check_lines_in_header=get_button_state_by_name("check_lines_in_header");
 	params.output.check_lines_in_data=get_button_state_by_name("check_lines_in_data");
@@ -1144,11 +1142,7 @@ G_MODULE_EXPORT gboolean check_plus(GtkWidget *widget, GdkEventKey *event, gpoin
 
 G_MODULE_EXPORT gboolean check_delete(GtkWidget *widget, GdkEventKey *event, gpointer data) { 
   if (event->keyval == GDK_KEY_Delete) {
-//     gtk_main_quit();
-//     
-// 	add_line_to_gtktreeview();
 	remove_selected_lines_from_REPLACEMENT_TREEVIEW();
-	
 	return TRUE;
   }
   return FALSE;

@@ -74,6 +74,8 @@ static vector<vector<string> > transform_tensor_unifying_columns_to_matrix(vecto
   
 static void remove_lines_or_columns_from_matrix(vector<vector<string> > *matrix,vector<int> *lines=nullptr, vector<int> *columns=nullptr);  
 
+static void remove_empty_lines_from_matrix(std::vector<std::vector<std::string>> *mat);
+
 static vector<vector<string> > transpose_matrix(vector<vector<string> > *matrix);
   
 static void fillup_matrix(vector<vector<string> > *matrix);

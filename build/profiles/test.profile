@@ -12,7 +12,7 @@ gtktextview
 gtkentry
 </type>
 <content>
-
+/tmp/
 </content>
 
 </AUSGABEVERZEICHNIS_ENTRY>
@@ -52,6 +52,15 @@ gtkcombobox
 </content>
 
 </LINES_BOX>
+<MERGE_BUTTON>
+<type>
+gtkcheckbutton
+</type>
+<content>
+1
+</content>
+
+</MERGE_BUTTON>
 <OUTPUT_DATA_DELIMITER_ENTRY>
 <type>
 gtkentry
@@ -66,7 +75,7 @@ tabulator
 gtkentry
 </type>
 <content>
-
+OP_merged.txt
 </content>
 
 </OUTPUT_NAME_ENTRY>
@@ -84,15 +93,7 @@ gtkcheckbutton
 treeview
 </type>
 <content>
-C	||Concentration	
-I	||Intensity	
-_ELEMENT_PRAEFIX_||
-_ELEMENT_SUFFIX_||_{filename[4]}
-_PARAM_PRAEFIX_||
-_PARAM_SUFFIX_||
-_UNIT_PRAEFIX_||
-_UNIT_SUFFIX_||
-atom/cm3||at/ccm
+32727||||
 </content>
 
 </REPLACEMENT_TREEVIEW>
@@ -101,7 +102,7 @@ atom/cm3||at/ccm
 gtktextview
 </type>
 <content>
-1,4,7,10,13,16
+
 </content>
 
 </SPALTEN_TEXTVIEW>
@@ -128,7 +129,7 @@ gtktextview
 gtkcheckbutton
 </type>
 <content>
-1
+0
 </content>
 
 </check_columns_in_data>
@@ -137,7 +138,7 @@ gtkcheckbutton
 gtkcheckbutton
 </type>
 <content>
-1
+0
 </content>
 
 </check_columns_in_header>
@@ -164,7 +165,7 @@ gtkcheckbutton
 gtkcheckbutton
 </type>
 <content>
-1
+0
 </content>
 
 </full_auto_dsims>

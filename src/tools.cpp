@@ -351,6 +351,20 @@ bool Tools::load_file_to_string(string filename_with_path, string *contents) {
 	return true;
 }
 
+void Tools::remove_empty_lines_from_matrix(std::vector<std::vector<std::string>> *mat) {
+	for (int i=mat->size()-1;i>=0;i--) {
+		bool empty=false;
+		for (int j=0;j<mat->at(i).size();j++) {
+			if (mat->at(i)[j]=="") empty=true;
+			else {	
+			  empty = false;
+			  break;
+			}
+		}
+		if (empty) mat->erase(mat->begin()+i);
+	}
+}
+
 bool Tools::load_file_to_vector_string(string filename_with_path, vector<string> *contents) {
   #ifdef __unix__
 #else

@@ -72,7 +72,7 @@ bool transform_gtkoverlay_params_to_xml(string *xml_content);
 
 bool load_xml_to_gtkoverlay_params(string *xml_content);
 
-bool execute_on_file(string filename);
+bool execute_on_file(string filename, bool write_merge_unifi=false);
 
 bool execution();
 

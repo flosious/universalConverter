@@ -25,6 +25,7 @@
 // parameter params;
 map<string, string>  config_params;
 vector<vector<string> > overview_conversion; // an overview what was converted: from where to where
+vector<vector<string> > merged_unifications;
 
 // UML - Ablauf
 /*
@@ -82,10 +83,12 @@ bool set_args(int    argc, char **argv) {
 // data was parsed from gtk-overlay and is now in the params-datastructure
 
 bool execution() {
+	merged_unifications.clear();
 	/*execute each file*/
-	for (int i=0;i<params.input.files.size();i++) {
+	for (int i=0;i<params.input.files.size()-1;i++) {
 		execute_on_file(params.input.files[i]);
 	}
+	execute_on_file(params.input.files[params.input.files.size()-1],true);
 	/*print overview*/
 	if (overview_conversion.size()>0) show_info_box(Tools::create_overview_string_from_matrix(&overview_conversion));
 	overview_conversion.clear();
@@ -94,13 +97,12 @@ bool execution() {
 
 bool filter_replacements(string *contents) {
 	for (int i=0;i<params.input.replacements.size();i++) {
-// 		cout << i << endl;
 		Tools::replace_chars_from_string(contents,params.input.replacements[i][1],params.input.replacements[i][2]);
 	}
 	return true;
 }
 
-bool execute_on_file(string filename) {
+bool execute_on_file(string filename, bool write_merge_unifi) {
 	if (filename=="") return false;
 	string contents, output_filename, output_directory, output_format;
 	vector<vector<string> > matrix;
@@ -116,6 +118,7 @@ bool execute_on_file(string filename) {
 	
 	/*fill up columns of matrix to MxN matrix style*/
 	Tools::fillup_matrix(&content_matrix);
+	Tools::remove_empty_lines_from_matrix(&content_matrix);
 	
 	/*discard lines or columns before parsing*/
 	if (!params.output.check_lines_in_header && !params.output.check_lines_in_data) filter_lines(&content_matrix);
@@ -131,6 +134,8 @@ bool execute_on_file(string filename) {
 	/*unify the headers to one header matrix*/
 	header = Tools::transform_tensor_unifying_columns_to_matrix(&headers);
 	}
+	
+	
 	
 	/*discard lines or columns after parsing*/
 	if (params.output.check_lines_in_header) filter_lines(&header);
@@ -161,16 +166,29 @@ bool execute_on_file(string filename) {
 	
 	/*unify matritzes to one*/
 	vector<vector<vector<string> > > unify; 
+	unify.clear();
 	unify.push_back(op_format_matrix);
 	if (!params.input.remove_headers) unify.push_back(header);   
 	unify.push_back(data);
 	vector<vector<string> > unification = Tools::transform_tensor_unifying_lines_to_matrix(&unify);
 	
+	/*merge all converted input files to ONE output file*/
+	if (params.output.merge_op) {
+		unification = Tools::transpose_matrix(&unification);
+		merged_unifications.insert(merged_unifications.end(),unification.begin(),unification.end());
+		if (write_merge_unifi) { 
+		  Tools::remove_empty_lines_from_matrix(&merged_unifications); 
+		  unification=Tools::transpose_matrix(&merged_unifications);
+		  Tools::remove_empty_lines_from_matrix(&unification);
+		}
+		else return true;	
+	}
+	
 	/*create output string*/
 	string output_string = Tools::format_matrix_to_string(&unification,config_params["line_delimiter"],params.output.data_delimiter);
 	
+	
 	/*translate commands in output directory form input filename*/
-// 	string op_dir = translate_input_to_output(params.output.directory,filename,&header);
 	parameter params_backup=params;
 	for (int i=0;i<params.input.replacements.size();i++) {
 		params.input.replacements[i][2]=translate_input_to_output(params.input.replacements[i][2],filename,&header);
@@ -208,7 +226,10 @@ bool execute_on_file(string filename) {
 	}
 	
 	/*record overview*/
-	overview_conversion.push_back({Tools::extract_filename(filename,config_params["path_delimiter"],""),filename_with_path});
+	string input_name;
+	if (params.output.merge_op) input_name = "ALL FILES";
+	  else input_name = Tools::extract_filename(filename,config_params["path_delimiter"],"");
+	overview_conversion.push_back({input_name,filename_with_path});
 	
 	/*write output string to file*/
 	Tools::write_to_file(filename_with_path,&output_string,false);
