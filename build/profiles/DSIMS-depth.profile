@@ -12,7 +12,7 @@ gtktextview
 gtkentry
 </type>
 <content>
-/tmp/
+
 </content>
 
 </AUSGABEVERZEICHNIS_ENTRY>
@@ -52,6 +52,15 @@ gtkcombobox
 </content>
 
 </LINES_BOX>
+<MERGE_BUTTON>
+<type>
+gtkcheckbutton
+</type>
+<content>
+0
+</content>
+
+</MERGE_BUTTON>
 <OUTPUT_DATA_DELIMITER_ENTRY>
 <type>
 gtkentry
@@ -66,7 +75,7 @@ tabulator
 gtkentry
 </type>
 <content>
-converted.txt
+
 </content>
 
 </OUTPUT_NAME_ENTRY>
@@ -84,10 +93,12 @@ gtkcheckbutton
 treeview
 </type>
 <content>
-0||_PARAM_PRAEFIX_||{filename[1]}
-1||x||6
-5||xx||4564
-2||xxx||242647
+0||_ELEMENT_PRAEFIX_||
+0||_ELEMENT_SUFFIX_||_
+0||_PARAM_PRAEFIX_||
+0||_PARAM_SUFFIX_||
+0||_UNIT_PRAEFIX_||
+0||_UNIT_SUFFIX_||
 </content>
 
 </REPLACEMENT_TREEVIEW>
@@ -172,3 +183,12 @@ gtkcheckbutton
 </content>
 
 </full_auto_tofsims>
+<include_sample_names>
+<type>
+gtkcheckbutton
+</type>
+<content>
+1
+</content>
+
+</include_sample_names>

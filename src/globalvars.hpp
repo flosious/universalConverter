@@ -35,6 +35,7 @@ struct prof {
 	string action;
 	bool full_auto_tofsims;
 	bool full_auto_dsims;
+	bool include_sample_names;
 };
 
 struct op {

@@ -297,19 +297,23 @@ vector<vector<string> > full_auto_tofsims(vector<vector<vector<string> > > *head
 
 vector<vector<string> > full_auto_dsims(vector<vector<vector<string> > > *headers) {
 	int c=0;
+	int sample_names_line_number=(headers->at(c)).size()-3;
 	int elements_line_number=(headers->at(c)).size()-2;
 	int params_units_line_number=(headers->at(c)).size()-1;
 	vector<vector<string> > header;
 	
+	vector<string> samples;
+	for (int i=0;i<((headers->at(c))[sample_names_line_number]).size();i++) {
+		if (( (headers->at(c))[sample_names_line_number][i]).size()>0 ) {
+			string result = ((headers->at(c))[sample_names_line_number][i]);
+			samples.push_back(result);
+		}
+	}
+	
+	
 	vector<string> elements;
 	for (int i=0;i<((headers->at(c))[elements_line_number]).size();i++) {
 		if (( (headers->at(c))[elements_line_number][i]).size()>0 ) {
-// 		  	std::stringstream temp((headers->at(c))[elements_line_number][i]);
-// 			int temp_int;
-// 			string temp_string;
-// 			temp >> temp_string >> temp_int;
-// 			string result;
-// 			result = string("\\+(")+to_string(temp_int)+string(")")+temp_string;
 			string result = ((headers->at(c))[elements_line_number][i]);
 			elements.push_back(result);
 		}
@@ -330,15 +334,23 @@ vector<vector<string> > full_auto_dsims(vector<vector<vector<string> > > *header
 	}
 	
 	
-	vector<string> unit_line,param_line,elements_line;
+	vector<string> unit_line,param_line,elements_line,sample_line;
 	for (int i=0;i<units.size();i++) {
-		
+		sample_line.push_back(samples[i*samples.size()/elements.size()/3]);
 		unit_line.push_back(string("_UNIT_PRAEFIX_")+units[i]+string("_UNIT_SUFFIX_"));
 // 		if (i%3==2) param_line.push_back(string("_PARAM_PRAEFIX_")+elements[i/3]+string(" ")+parameters[i]+string("_PARAM_SUFFIX_"));
 // 		else param_line.push_back(string("_PARAM_PRAEFIX_")+parameters[i]+string("_PARAM_SUFFIX_"));
 		param_line.push_back(string("_PARAM_PRAEFIX_")+elements[i/3]+string(" ")+parameters[i]+string("_PARAM_SUFFIX_"));
-		elements_line.push_back(string("_ELEMENT_PRAEFIX_")+elements[i/3]+string("_ELEMENT_SUFFIX_")); // every 3rd element is a new dependency -> another element/complex/cluster
+		if (params.profile.include_sample_names) {
+			elements_line.push_back(string("_ELEMENT_PRAEFIX_")+elements[i/3]+string("_ELEMENT_SUFFIX_")+samples[i*samples.size()/elements.size()/3]); // every 3rd element is a new dependency -> another element/complex/cluster
+		} else {
+			elements_line.push_back(string("_ELEMENT_PRAEFIX_")+elements[i/3]+string("_ELEMENT_SUFFIX_")); // every 3rd element is a new dependency -> another element/complex/cluster
+			
+		}
+		
 	}
+	
+	header.push_back(sample_line);
 	header.push_back(param_line);
 	header.push_back(unit_line);
 	header.push_back(elements_line);
@@ -427,7 +439,10 @@ bool parse_data_and_header_parts(vector<vector<string> > *content_matrix,vector<
 	for (int i=0;i<content_matrix->size();i++) {
 		check_number=1;
 		for (int j=0;j<(content_matrix->at(i)).size();j++) {
-			check_number=check_number*Tools::is_number((*content_matrix)[i][j]);
+		  if (Tools::is_number((*content_matrix)[i][j])!=1 && ((*content_matrix)[i][j].size()!=0)) {
+			check_number=0;
+		  }
+		    
 		}
 		if (check_number==0 || ((content_matrix->at(i).size())==2 && ((content_matrix->at(i)[1].size())==0) )) { // no number, so its a header-part
 			header_temp.push_back((*content_matrix)[i]);

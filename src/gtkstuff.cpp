@@ -611,6 +611,8 @@ bool parse_buttons() {
 // // 	
 	params.profile.full_auto_tofsims=get_button_state_by_name("full_auto_tofsims");
 	params.profile.full_auto_dsims=get_button_state_by_name("full_auto_dsims");
+	params.profile.include_sample_names=get_button_state_by_name("include_sample_names");
+	
 	return true;
 }  
   

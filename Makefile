@@ -8,7 +8,8 @@ WIN		= -mwindows
 STD		= -std=c++11
 COPT		= -export-dynamic
 GTKCFLAGS       = `pkg-config --cflags gtk+-3.0`
-GTKLDFLAGS      = `pkg-config --libs gtk+-3.0 gmodule-2.0`
+GTKLDFLAGS      = `pkg-config --libs gtk+-3.0`
+#GTKLDFLAGS      = `pkg-config --libs gtk+-3.0 gmodule-2.0`
 
 EXECUTABLE = universalConverter
 SOURCEDIR = src
