@@ -126,6 +126,7 @@ bool execute_on_file(string filename, bool write_merge_unifi) {
 	
 	/*parse the headers and the datas (tensors)*/
 	parse_data_and_header_parts(&content_matrix,&datas,&headers);
+
 	
 	vector<vector<string> > header;
 	if (params.profile.full_auto_dsims) header=full_auto_dsims(&headers);
@@ -144,9 +145,10 @@ bool execute_on_file(string filename, bool write_merge_unifi) {
 	/*unify the datas to one data matrix*/
 	vector<vector<string> > data = Tools::transform_tensor_unifying_columns_to_matrix(&datas);
 	
+	
 	/*discard lines or columns after parsing*/
-	if (params.output.check_lines_in_data) filter_lines(&data);
-	if (params.output.check_columns_in_data) filter_columns(&data);
+	if (params.output.check_lines_in_data && !params.output.merge_op) filter_lines(&data);
+	if (params.output.check_columns_in_data && !params.output.merge_op) filter_columns(&data);
 	
 	/*translate commands in output directory form input filename*/
 	string op_dir = translate_input_to_output(params.output.directory,filename,&header);
@@ -180,6 +182,8 @@ bool execute_on_file(string filename, bool write_merge_unifi) {
 		  Tools::remove_empty_lines_from_matrix(&merged_unifications); 
 		  unification=Tools::transpose_matrix(&merged_unifications);
 		  Tools::remove_empty_lines_from_matrix(&unification);
+		  if (params.output.check_lines_in_data) filter_lines(&unification);
+		  if (params.output.check_columns_in_data) filter_columns(&unification);
 		}
 		else return true;	
 	}
@@ -439,8 +443,9 @@ bool parse_data_and_header_parts(vector<vector<string> > *content_matrix,vector<
 	for (int i=0;i<content_matrix->size();i++) {
 		check_number=1;
 		for (int j=0;j<(content_matrix->at(i)).size();j++) {
-		  if (Tools::is_number((*content_matrix)[i][j])!=1 && ((*content_matrix)[i][j].size()!=0)) {
+		  if (((*content_matrix)[i][j].size()>0) && Tools::is_number((*content_matrix)[i][j])!=1) {
 			check_number=0;
+// 			std::cout << (*content_matrix)[i][j] << std::endl;
 		  }
 		    
 		}

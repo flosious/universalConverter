@@ -51,6 +51,7 @@ struct op {
 	bool check_lines_in_data;
 	bool check_columns_in_header;
 	bool check_columns_in_data;
+// 	bool check_lines_as_file;
 };
 
 struct ip {

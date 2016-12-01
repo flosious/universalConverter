@@ -604,7 +604,8 @@ bool parse_buttons() {
 	params.output.overwrite_protection=get_button_state_by_name("WRITEPROTECTION_CHECKBUTTON");
 	params.output.merge_op=get_button_state_by_name("MERGE_BUTTON");
 	params.input.remove_headers=get_button_state_by_name("REMOVE_HEADER_CHECKBUTTON");
-	params.output.check_lines_in_header=get_button_state_by_name("check_lines_in_header");
+// 	params.output.check_lines_as_file=get_button_state_by_name("check_lines_as_file"); // check_lines_as_file
+	params.output.check_lines_in_header=get_button_state_by_name("check_lines_in_header"); 
 	params.output.check_lines_in_data=get_button_state_by_name("check_lines_in_data");
 	params.output.check_columns_in_header=get_button_state_by_name("check_columns_in_header");
 	params.output.check_columns_in_data=get_button_state_by_name("check_columns_in_data");

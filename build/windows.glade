@@ -786,7 +786,7 @@
                           <object class="GtkLabel" id="label11">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">Trennzeichen</property>
+                            <property name="label" translatable="yes">Delimiter</property>
                           </object>
                         </child>
                       </object>
