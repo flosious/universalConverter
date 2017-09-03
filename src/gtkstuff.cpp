@@ -613,6 +613,12 @@ bool parse_buttons() {
 	params.profile.full_auto_tofsims=get_button_state_by_name("full_auto_tofsims");
 	params.profile.full_auto_dsims=get_button_state_by_name("full_auto_dsims");
 	params.profile.include_sample_names=get_button_state_by_name("include_sample_names");
+    params.profile.use_PSE=get_button_state_by_name("use_PSE");
+	
+	params.input.REPLACEMENTS_BEFORE=get_button_state_by_name("REPLACEMENTS_BEFORE_CHECKBUTTON");
+	params.input.REPLACEMENTS_AFTER=get_button_state_by_name("REPLACEMENTS_AFTER_CHECKBUTTON");
+    
+    
 	
 	return true;
 }  
@@ -1089,6 +1095,20 @@ bool clear_params() {
 	params = new_params;
 }
   
+G_MODULE_EXPORT void on_use_PSE_toggled (GtkWidget *widget, gpointer data) 
+{ // set_gtkcheckbutton_active
+    if (params.profile.use_PSE==false) {
+  if (parse_PSE_from_txt()==-1) {
+		show_error_box(string("could not find/parse PSE.txt"));
+        params.profile.use_PSE = false;
+	} else {
+            show_info_box(string("using PSE"));
+            params.profile.use_PSE = true;
+    }
+    } else params.profile.use_PSE=false;
+    set_gtkcheckbutton_active("use_PSE",params.profile.use_PSE);
+    return;
+}
 
 
 G_MODULE_EXPORT void on_window_destroy (GtkWidget *widget, gpointer data)

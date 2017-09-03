@@ -21,8 +21,6 @@
 #ifndef FUNCTIONS_HPP
 #define FUNCTIONS_HPP
 
-
-
 #include <iostream>
 #include <string>
 #include <gtk/gtk.h>
@@ -34,6 +32,9 @@
 #include "gtkstuff.hpp"
 #include "print.hpp"
 #include "dirent.h"
+
+#include <algorithm>
+#include <regex>
 
 // #include <boost/filesystem.hpp>
 
@@ -60,6 +61,8 @@ bool set_args(int    argc, char **argv);
 bool filter_lines(vector<vector<string> > *matrix);
 bool filter_columns(vector<vector<string> > *matrix);
 
+bool replace_clusters_with_PSE(vector<string> &clusters);
+
 bool get_profile_list();
 
 bool delete_profile(string profile_name);
@@ -76,5 +79,6 @@ bool execute_on_file(string filename, bool write_merge_unifi=false);
 
 bool execution();
 
+int parse_PSE_from_txt(string filename="PSE.txt");
 
 #endif // FUNCTIONS_HPP

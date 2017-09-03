@@ -18,6 +18,9 @@
  *  
  */
 
+// #define DEBUG	1
+
+
 #ifndef GLOBALVARS_HPP
 #define GLOBALVARS_HPP
 
@@ -36,6 +39,7 @@ struct prof {
 	bool full_auto_tofsims;
 	bool full_auto_dsims;
 	bool include_sample_names;
+    bool use_PSE;
 };
 
 struct op {
@@ -63,6 +67,8 @@ struct ip {
 	int lines_type; // 0==discard; 1==include
 	int columns_type; // 0==discard; 1==include
 	bool remove_headers;
+	bool REPLACEMENTS_BEFORE;
+	bool REPLACEMENTS_AFTER;
 	vector<vector<string> > replacements;
 };
 
@@ -73,6 +79,13 @@ struct parameter {
 	  ip input;
 	  op output;
 };
+
+struct element_properties {
+	int massezahl;
+	string symbol;
+	double masse;
+	double haeufigkeit;
+} ;
 
 extern map<string, string>   config_params;
 extern parameter params; // parsed parameters from overlay

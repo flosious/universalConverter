@@ -26,7 +26,7 @@
 map<string, string>  config_params;
 vector<vector<string> > overview_conversion; // an overview what was converted: from where to where
 vector<vector<string> > merged_unifications;
-
+vector<element_properties> PSE; // the periodic system of elements
 // UML - Ablauf
 /*
  * 1. Program start 	-> load config		-> load profiles (standart)
@@ -67,7 +67,7 @@ void init(int   argc, char **argv ) {
 	/**/
 	
 	set_args(argc, argv);
-
+    
 }
 
 bool set_args(int    argc, char **argv) {
@@ -95,8 +95,18 @@ bool execution() {
 	return true;
 }
 
+bool sort_replacements(std::vector<std::string>& A, std::vector<std::string>& B) {
+    if (A[0] < B[0])
+      return true;
+    return false;
+}
+
 bool filter_replacements(string *contents) {
-	for (int i=0;i<params.input.replacements.size();i++) {
+    sort(params.input.replacements.begin(),params.input.replacements.end(),sort_replacements);
+    for (int i=0;i<params.input.replacements.size();i++) {
+        
+        
+        /* sort for order int first */
 		Tools::replace_chars_from_string(contents,params.input.replacements[i][1],params.input.replacements[i][2]);
 	}
 	return true;
@@ -111,7 +121,7 @@ bool execute_on_file(string filename, bool write_merge_unifi) {
 	/*load file*/
 	if (!Tools::load_file_to_string(filename,&contents)) return false;
 	
-	
+	if (params.input.REPLACEMENTS_BEFORE) filter_replacements(&contents);
 	
 	/*format content to matrix*/
 	vector<vector<string> > content_matrix = Tools::format_string_to_matrix(&contents,"\n",params.input.data_delimiter);
@@ -200,7 +210,7 @@ bool execute_on_file(string filename, bool write_merge_unifi) {
 	}
 	/*filter replacements from raw content string*/
 // 	cout << "filter replacements" << endl;
-	filter_replacements(&output_string);
+	if (params.input.REPLACEMENTS_AFTER) filter_replacements(&output_string);
 	
 	/*if no output filename, set filename of input as default*/
 	if (op_filen=="") {
@@ -244,6 +254,34 @@ bool execute_on_file(string filename, bool write_merge_unifi) {
 	return true;
 }
 
+// bool replace_clusters_with_PSE(vector<string> &clusters) {
+// 	vector<vector<string>> elements_in_clusters;
+// 	cmatch match;
+// 	regex ex;
+// 	ex.assign("\^([0-9]*)([A-Z][a-z]*)([0-9]*)"); // ^70Ge P ^30Si2 
+// 		
+// 		
+// 	for (int i=0;i<clusters.size();i++) {
+// 		//1st get each element within one cluster
+// 		vector<string> elements_in_cluster;
+// 		string cluster = clusters[i];
+// 		int pos = 0;
+// 		int pos_1;
+// 		while (pos!=std::string::npos) {
+// 			pos_1=pos;
+// 			pos = cluster.find_first_of("ABCDEFGHIJKLMNOPQRSTUVWXYZ",pos);
+// 			elements_in_cluster.push_back(cluster.substr(pos_1,pos-pos_1));
+// 			
+// 		while (regex_search(fc.c_str(), match, ex)) {  //
+// 			
+// 		}
+// 		}
+// 		//2nd find all elements from the cluster within the PSE
+// 		
+// 		//3rd replace the elements from the cluster with the special format of the found elements from the PSE
+// 	}
+// }
+
 vector<vector<string> > full_auto_tofsims(vector<vector<vector<string> > > *headers) {
 	int c=0;
 	int elements_line_number=(headers->at(c)).size()-3;
@@ -256,7 +294,7 @@ vector<vector<string> > full_auto_tofsims(vector<vector<vector<string> > > *head
 		(headers->at(c))[j][0]=Tools::remove_chars_from_string((headers->at(c))[j][0],"#");
 	}
 	for (int j=0; j<(headers->at(c)[elements_line_number]).size();j++) {
-		(headers->at(c))[elements_line_number][j]=Tools::remove_chars_from_string((headers->at(c))[elements_line_number][j],"+-");
+// 		(headers->at(c))[elements_line_number][j]=Tools::remove_chars_from_string((headers->at(c))[elements_line_number][j],"+-");
 // 		(headers->at(c))[elements_line_number][j]=Tools::remove_chars_from_string((headers->at(c))[elements_line_number][j],"-");
 	}
 	
@@ -270,7 +308,8 @@ vector<vector<string> > full_auto_tofsims(vector<vector<vector<string> > > *head
 	vector<string> units, parameters;
 	for (int i=0;i<((headers->at(c))[params_units_line_number]).size();i++) {
 		if ((((headers->at(c))[params_units_line_number])[i]).size()>0) {
-			units.push_back(Tools::get_string_between_string_A_and_next_B(&((headers->at(c))[params_units_line_number][i]),"(",")"));
+			units.push_back(Tools::get_string_between_string_A_and_last_B(&((headers->at(c))[params_units_line_number][i]),"(",")"));
+			//units.push_back((Tools::get_strings_between_delimiter(((headers->at(c))[params_units_line_number][i]),"/")).at(1));
 			parameters.push_back((Tools::get_strings_between_delimiter(((headers->at(c))[params_units_line_number][i]),"(")).at(0));
 		}
 	}
@@ -361,6 +400,56 @@ vector<vector<string> > full_auto_dsims(vector<vector<vector<string> > > *header
 	
 	return header;
 }
+
+
+/*
+ * loads the PSE within the memory
+ */
+int parse_PSE_from_txt(string filename) {
+	setlocale(LC_ALL, "C"); 
+	vector<string> isotope_string;
+	element_properties isotope;
+	string delimiter = ";";
+	string line;
+	fstream fileh; 
+	fileh.open(filename);
+	if (fileh.is_open()) {
+		PSE.clear();
+		while (getline(fileh,line)) {
+		      Tools::replace_chars_from_string(&line,"\r","");
+		      Tools::replace_chars_from_string(&line,"\n","");
+		      isotope_string = Tools::get_strings_between_delimiter(line,delimiter);
+		      
+		      isotope_string[0]=Tools::remove_spaces_from_string(isotope_string[0]);
+		      isotope_string[1]=Tools::remove_spaces_from_string(isotope_string[1]);
+		      isotope_string[2]=Tools::remove_spaces_from_string(isotope_string[2]);
+		      isotope_string[3]=Tools::remove_spaces_from_string(isotope_string[3]);
+		      
+		      isotope=element_properties();
+		      
+		      
+		      isotope.massezahl=Tools::str_to_int(isotope_string[0]);
+		      isotope.symbol=isotope_string[1];
+		      isotope.masse=Tools::str_to_double(isotope_string[2]);
+		      isotope.haeufigkeit=Tools::str_to_double(isotope_string[3]);
+		      PSE.push_back(isotope); // 0=massezahl; 1=name; 2=masse; 3=häufigkeit (relative stoffmenge)
+		      
+                
+    
+		}
+		fileh.close();
+	} else return -1;
+	for (int i=0; i<PSE.size();i++) {
+			#ifdef DEBUG
+//             cout << "element->massezahl: " << element->massezahl << endl; 
+            cout << "(PSE.at("<<i<<")).massezahl: " << (PSE.at(i)).massezahl << endl; 
+//             cout << "element->haeufigkeit: " << element->haeufigkeit << endl; 
+            cout << "(PSE.at("<<i<<")).haeufigkeit: " << (PSE.at(i)).haeufigkeit << endl; 
+            #endif
+	}
+	return 1;
+}
+
 
 string check_directory_string(string directory) {
 	if (directory=="") {
@@ -542,7 +631,7 @@ bool filter_lines(vector<vector<string> > *matrix) {
 	  }
 	}
 	}
-	Print::vector_int(lines);
+	//Print::vector_int(lines);
 	Tools::remove_lines_or_columns_from_matrix(matrix,&lines,&columns);
 	
 	return true;

@@ -446,11 +446,15 @@ vector<string> Tools::get_all_string_between_string_A_and_next_B(string *mainstr
 }
 
 string Tools::get_string_between_string_A_and_last_B(string *mainstring,string A, string B) {
-	int len = mainstring->rfind(B)-mainstring->find(A)-1;
+	int posA, posB;
+	posA=mainstring->find(A);
+	posB=mainstring->rfind(B);
+	int len = posB-posA-1;
 	if (len>0) { 
-		return mainstring->substr(mainstring->find(A)+1,len);
+		return mainstring->substr(posA+1,len);
 	}
-	return "";
+	//std::cout << "returned empty\n" <<std::endl;
+	return mainstring->substr(posA+1,mainstring->size());;
 }
 
 vector<string> Tools::get_strings_between_delimiter(string mainstring, string delimiter, bool empty) {

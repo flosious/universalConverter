@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.0 -->
+<!-- Generated with glade 3.18.3 -->
 <interface>
   <requires lib="gtk+" version="3.6"/>
   <object class="GtkFileChooserDialog" id="FILE_DIALOG">
@@ -167,29 +167,15 @@
   </object>
   <object class="GtkListStore" id="liststore2">
     <columns>
-      <!-- column-name order -->
-      <column type="gint"/>
       <!-- column-name this -->
       <column type="gchararray"/>
       <!-- column-name with -->
       <column type="gchararray"/>
     </columns>
   </object>
-  <object class="GtkListStore" id="liststore3">
-    <columns>
-      <!-- column-name start -->
-      <column type="gchararray"/>
-      <!-- column-name name -->
-      <column type="gchararray"/>
-      <!-- column-name last -->
-      <column type="gchararray"/>
-    </columns>
-  </object>
   <object class="GtkWindow" id="mainwindow">
-    <property name="width_request">900</property>
+    <property name="width_request">790</property>
     <property name="can_focus">False</property>
-    <property name="hexpand">True</property>
-    <property name="vexpand">True</property>
     <property name="window_position">center</property>
     <signal name="destroy" handler="on_window_destroy" swapped="no"/>
     <child>
@@ -259,21 +245,6 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkButton" id="VORLAGESPEICHERN_BUTTON">
-                    <property name="label" translatable="yes">save</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                    <property name="xalign">0.47999998927116394</property>
-                    <signal name="clicked" handler="save_profile_button_clicked" swapped="no"/>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">3</property>
-                  </packing>
-                </child>
-                <child>
                   <object class="GtkBox" id="box13">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
@@ -308,42 +279,26 @@
                         <property name="position">1</property>
                       </packing>
                     </child>
-                    <child>
-                      <object class="GtkCheckButton" id="include_sample_names">
-                        <property name="label" translatable="yes">include_sample_names</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
-                        <property name="xalign">0</property>
-                        <property name="draw_indicator">True</property>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">False</property>
-                        <property name="position">2</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkCheckButton" id="use_PSE">
-                        <property name="label" translatable="yes">use_PSE</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
-                        <property name="xalign">0</property>
-                        <property name="draw_indicator">True</property>
-                        <signal name="toggled" handler="on_use_PSE_toggled" swapped="no"/>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">False</property>
-                        <property name="position">3</property>
-                      </packing>
-                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
                     <property name="position">3</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkButton" id="VORLAGESPEICHERN_BUTTON">
+                    <property name="label" translatable="yes">save</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="xalign">0.47999998927116394</property>
+                    <signal name="clicked" handler="save_profile_button_clicked" swapped="no"/>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">4</property>
                   </packing>
                 </child>
                 <child>
@@ -362,78 +317,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkFrame">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="label_xalign">0</property>
-                    <property name="shadow_type">none</property>
-                    <child>
-                      <object class="GtkAlignment">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="left_padding">12</property>
-                        <child>
-                          <object class="GtkScrolledWindow">
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="shadow_type">in</property>
-                            <child>
-                              <object class="GtkTreeView" id="DYNAMICFILTER_TREEVIEW">
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="model">liststore3</property>
-                                <property name="reorderable">True</property>
-                                <property name="enable_grid_lines">both</property>
-                                <property name="enable_tree_lines">True</property>
-                                <child internal-child="selection">
-                                  <object class="GtkTreeSelection" id="treeview-selection2"/>
-                                </child>
-                                <child>
-                                  <object class="GtkTreeViewColumn" id="start">
-                                    <property name="resizable">True</property>
-                                    <property name="title" translatable="yes">eins</property>
-                                    <property name="clickable">True</property>
-                                    <property name="reorderable">True</property>
-                                    <property name="sort_indicator">True</property>
-                                  </object>
-                                </child>
-                                <child>
-                                  <object class="GtkTreeViewColumn" id="name">
-                                    <property name="resizable">True</property>
-                                    <property name="title" translatable="yes">zwei</property>
-                                    <property name="clickable">True</property>
-                                    <property name="reorderable">True</property>
-                                    <property name="sort_indicator">True</property>
-                                  </object>
-                                </child>
-                                <child>
-                                  <object class="GtkTreeViewColumn" id="last">
-                                    <property name="resizable">True</property>
-                                    <property name="title" translatable="yes">drei</property>
-                                    <property name="clickable">True</property>
-                                    <property name="reorderable">True</property>
-                                    <property name="sort_indicator">True</property>
-                                  </object>
-                                </child>
-                              </object>
-                            </child>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
-                    <child type="label">
-                      <object class="GtkLabel">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">dynamic filters</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="expand">True</property>
-                    <property name="fill">True</property>
-                    <property name="position">6</property>
-                  </packing>
+                  <placeholder/>
                 </child>
               </object>
               <packing>
@@ -546,7 +430,7 @@
                         </child>
                       </object>
                       <packing>
-                        <property name="expand">False</property>
+                        <property name="expand">True</property>
                         <property name="fill">True</property>
                         <property name="position">1</property>
                       </packing>
@@ -663,29 +547,11 @@
                                     <property name="model">liststore2</property>
                                     <property name="reorderable">True</property>
                                     <property name="enable_grid_lines">both</property>
-                                    <property name="enable_tree_lines">True</property>
                                     <signal name="button-press-event" handler="mouse_clicked" swapped="no"/>
                                     <signal name="key-press-event" handler="check_delete" swapped="no"/>
                                     <signal name="key-press-event" handler="check_plus" swapped="no"/>
                                     <child internal-child="selection">
                                       <object class="GtkTreeSelection" id="treeview-selection1"/>
-                                    </child>
-                                    <child>
-                                      <object class="GtkTreeViewColumn" id="treeviewcolumn3">
-                                        <property name="resizable">True</property>
-                                        <property name="title" translatable="yes">order</property>
-                                        <property name="clickable">True</property>
-                                        <property name="reorderable">True</property>
-                                        <property name="sort_indicator">True</property>
-                                        <child>
-                                          <object class="GtkCellRendererText" id="cellrenderertext5">
-                                            <signal name="edited" handler="replacements_edited_int" object="treeviewcolumn3" swapped="no"/>
-                                          </object>
-                                          <attributes>
-                                            <attribute name="text">0</attribute>
-                                          </attributes>
-                                        </child>
-                                      </object>
                                     </child>
                                     <child>
                                       <object class="GtkTreeViewColumn" id="treeviewcolumn1">
@@ -699,7 +565,7 @@
                                             <signal name="edited" handler="replacements_edited" object="treeviewcolumn1" swapped="no"/>
                                           </object>
                                           <attributes>
-                                            <attribute name="text">1</attribute>
+                                            <attribute name="text">0</attribute>
                                           </attributes>
                                         </child>
                                       </object>
@@ -716,7 +582,7 @@
                                             <signal name="edited" handler="replacements_edited" object="treeviewcolumn2" swapped="no"/>
                                           </object>
                                           <attributes>
-                                            <attribute name="text">2</attribute>
+                                            <attribute name="text">1</attribute>
                                           </attributes>
                                         </child>
                                       </object>
@@ -739,48 +605,6 @@
                         <property name="expand">True</property>
                         <property name="fill">True</property>
                         <property name="position">4</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkBox" id="box14">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <child>
-                          <object class="GtkCheckButton" id="REPLACEMENTS_BEFORE_CHECKBUTTON">
-                            <property name="label" translatable="yes">replacements before</property>
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">False</property>
-                            <property name="xalign">0</property>
-                            <property name="yalign">0.52999997138977051</property>
-                            <property name="draw_indicator">True</property>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">False</property>
-                            <property name="position">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkCheckButton" id="REPLACEMENTS_AFTER_CHECKBUTTON">
-                            <property name="label" translatable="yes">replacements after</property>
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">False</property>
-                            <property name="xalign">0</property>
-                            <property name="draw_indicator">True</property>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">False</property>
-                            <property name="position">1</property>
-                          </packing>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">5</property>
                       </packing>
                     </child>
                   </object>
@@ -926,7 +750,7 @@
                           <object class="GtkLabel" id="label11">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">Delimiter</property>
+                            <property name="label" translatable="yes">Trennzeichen</property>
                           </object>
                         </child>
                       </object>
@@ -982,21 +806,6 @@
                                     <property name="position">1</property>
                                   </packing>
                                 </child>
-                                <child>
-                                  <object class="GtkCheckButton" id="MERGE_BUTTON">
-                                    <property name="label" translatable="yes">merge to 1 output file</property>
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
-                                    <property name="receives_default">False</property>
-                                    <property name="xalign">0</property>
-                                    <property name="draw_indicator">True</property>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">True</property>
-                                    <property name="position">2</property>
-                                  </packing>
-                                </child>
                               </object>
                             </child>
                           </object>
@@ -1005,7 +814,7 @@
                           <object class="GtkLabel" id="label15">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">Other settings</property>
+                            <property name="label" translatable="yes">Otherl settings</property>
                           </object>
                         </child>
                       </object>
